@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    string username = ViewBag.AccountUserName;
+    if (ViewBag.AccountUserName != null)
+    {
+        username = ViewBag.AccountUserName;
+    }
+    else
+    {
+        username = "Khách";
+    }
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Thời gian hiện tại: @DateTime.Now</p>
+    <p>Tên : @username</p>
+    @if(@username != "Khách")
+    {
+        <a asp-controller="Accounts" asp-action="Logout">Logout</a>
+    }
+    else
+    {
+        <a asp-controller="Accounts" asp-action="Logout" style="display:none">Logout</a>
+    }
+</div>

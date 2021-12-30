@@ -1,0 +1,80 @@
+﻿@model IEnumerable<DoAn02.Models.Product>
+@{
+    ViewData["Title"] = "Danh Sách Sản Phẩm";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!-- Hoverable rows start -->
+<section class="section">
+    <div class="row" id="table-hover-row">
+        <div class="col-12">
+            <div class="card">
+                <h1>Danh Sách Sản Phẩm</h1>
+                <div class="card-content">
+                    <div class="card-body">
+                        <p>
+                            <a asp-controller="Products" asp-action="Create" class="btn btn-info">TẠO SẢN PHẨM</a>
+                        </p>
+                    </div>
+                    <!-- table hover -->
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>SKU</th>
+                                    <th>TÊN SẢN PHẨM</th>
+                                    <th>MÔ TẢ</th>
+                                    <th>ĐƠN GIÁ</th>
+                                    <th>SỐ LƯỢNG</th>
+                                    <th>ID LOẠI SẢN PHẨM</th>
+                                    <th>STATUS</th>
+                                    <th>HÌNH ẢNH</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-bold-500">@item.Sku</td>
+                                        <td>@item.Name</td>
+                                        <td class="text-bold-500">@item.Des</td>
+                                        <td>@item.Price.ToString("#,##0VNĐ")</td>
+                                        <td>@item.Stock</td>
+                                        <td>@item.ProductTypeId</td>
+                                        <td>
+                                            @if (item.Status == true)
+                                            {
+                                                <span class="badge bg-success text-white">ACTIVE</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-primary text-white">UNACTIVE</span>
+                                            }
+                                        </td>
+                                        <td><img src="~/img/@item.Image" style="width:100px"></td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Sửa</a> |
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Chi Tiết</a> |
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Xóa</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hoverable rows end -->
+<style>
+    .card .card-body {
+        padding: 23px 0 10px 8px;
+    }
+
+    .card {
+        padding: 1rem;
+        margin: 1rem;
+    }
+</style>

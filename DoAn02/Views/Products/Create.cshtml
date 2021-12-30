@@ -1,0 +1,188 @@
+﻿@model DoAn02.Models.Product
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<!-- // Basic multiple Column Form section start -->
+<section id="multiple-column-form">
+    <div class="row match-height">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h1>TẠO SẢN PHẨM</h1>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form asp-controller="Products" asp-action="Create" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="first-name-column">MÃ SKU</label>
+                                        <input asp-for="Sku" type="text" class="form-control" placeholder="Mã SKU..">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="country-floating">STOCK</label>
+                                        <input asp-for="Stock" type="text" class="form-control" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="last-name-column">TÊN SẢN PHẨM</label>
+                                        <input asp-for="Name" type="text" class="form-control" placeholder="Tên Sản Phẩm..">
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="city-column">GIÁ</label>
+                                        <input asp-for="Price" type="text" class="form-control" placeholder="VNĐ">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="city-column">ID LOẠI SP</label>
+                                        <input asp-for="ProductTypeId" type="text" class="form-control" placeholder="ID..">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="city-column">LOẠI SP</label>
+                                        <select class="form-control" asp-for="ProductTypes" asp-items="ViewBag.ProductTypes"></select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <input asp-for="Status" type="checkbox" class='form-check-input'>
+                                        <label for="checkbox5">TRẠNG THÁI</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1" class="form-label">MÔ TẢ</label>
+                                        <textarea asp-for="Des" class="form-control" rows="6"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <label for="city-column">HÌNH ẢNH</label>
+                                    <div class="center">
+                                        <div class="form-group">
+                                            <div class="form-input">
+                                                <div class="preview">
+                                                    <img id="file-ip-1-preview">
+                                                </div>
+                                                <label for="file-ip-1">Upload Image</label>
+                                                <input type="file" asp-for="ImageFile" id="file-ip-1" accept="image/*" onchange="showPreview(event);">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button type="submit" value="Create" class="btn btn-primary me-1 mb-1" id="success">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--toast-->
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-4 col-12">
+            <button id="basic" class="btn btn-outline-primary btn-lg btn-block" style="display:none">
+                Basic
+                Example
+            </button>
+        </div>
+        <div class="col-md-4 col-12">
+            <button id="title" class="btn btn-outline-primary btn-lg btn-block" style="display:none">
+                A title with a text
+                under
+            </button>
+        </div>
+        <div class="col-md-4 col-12">
+            <button id="footer" class="btn btn-outline-primary btn-lg btn-block" style="display:none">
+                With
+                Footer
+            </button>
+        </div>
+    </div>
+</div>
+<!--toast-->
+<!-- // Basic multiple Column Form section end -->
+<style>
+
+    body {
+        margin: 0px;
+        height: 100vh;
+    }
+
+    .center {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form-input {
+        width: 350px;
+        padding: 20px;
+        background: #fff;
+        box-shadow: -3px -3px 7px rgba(94, 104, 121, 0.377), 3px 3px 7px rgba(94, 104, 121, 0.377);
+    }
+
+        .form-input input {
+            display: none;
+        }
+
+        .form-input label {
+            display: block;
+            width: 45%;
+            height: 45px;
+            margin-left: 25%;
+            line-height: 50px;
+            text-align: center;
+            background: #1172c2;
+            color: #fff;
+            font-size: 15px;
+            font-family: "Open Sans",sans-serif;
+            text-transform: Uppercase;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-input img {
+            width: 100%;
+            display: none;
+            margin-bottom: 30px;
+        }
+</style>
+
+
+<script type="text/javascript">
+    function showPreview(event) {
+        if (event.target.files.length > 0) {
+            var src = URL.createObjectURL(event.target.files[0]);
+            var preview = document.getElementById("file-ip-1-preview");
+            preview.src = src;
+            preview.style.display = "block";
+        }
+    }
+</script>

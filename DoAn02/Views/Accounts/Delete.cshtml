@@ -1,0 +1,116 @@
+﻿@model DoAn02.Models.Account
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Xóa Tài Khoản</h1>
+
+<section id="multiple-column-form">
+    <div class="row match-height">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Bảng Tạo Tài Khoản</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form asp-controller="Accounts" asp-action="Details" class="form">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="first-name-column">USERNAME</label>
+                                        <input asp-for="Username" type="text" class="form-control" placeholder="Username">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="last-name-column">HỌ VÀ TÊN</label>
+                                        <input asp-for="FullName" type="text" class="form-control" placeholder="Họ và Tên..">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="city-column">PASSWORD</label>
+                                        <input asp-for="Password" type="text" class="form-control" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="country-floating">SĐT</label>
+                                        <input asp-for="Phone" type="text" class="form-control" placeholder="SĐT">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="company-column">ĐỊA CHỈ</label>
+                                        <input asp-for="Address" type="text" class="form-control" placeholder="123,HCM..">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="email-id-column">Email</label>
+                                        <input asp-for="Email" type="email" class="form-control" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group col-12">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" asp-for="Status" /> @Html.DisplayNameFor(model => model.Status)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" asp-for="IsAdmin" /> @Html.DisplayNameFor(model => model.IsAdmin)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex justify-content-end">
+                                </div>
+                            </div>
+                        </form>
+                        <div>
+                            <form asp-action="Delete">
+                                <input type="hidden" asp-for="Id" />
+                                <input type="submit" value="Xóa" class="btn btn-danger" id="success" /> |
+                                <a asp-action="Index">Trở Lại Danh Sách</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- // Basic multiple Column Form section end -->
+<!--toast-->
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-4 col-12">
+            <button id="basic" class="btn btn-outline-primary btn-lg btn-block" style="display:none">
+                Basic
+                Example
+            </button>
+        </div>
+        <div class="col-md-4 col-12">
+            <button id="title" class="btn btn-outline-primary btn-lg btn-block" style="display:none">
+                A title with a text
+                under
+            </button>
+        </div>
+        <div class="col-md-4 col-12">
+            <button id="footer" class="btn btn-outline-primary btn-lg btn-block" style="display:none">
+                With
+                Footer
+            </button>
+        </div>
+    </div>
+</div>
+<!--toast-->

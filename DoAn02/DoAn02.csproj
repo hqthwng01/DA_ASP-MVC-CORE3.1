@@ -1,0 +1,77 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20211110091914_ProductTypes.cs" />
+    <Compile Remove="Migrations\20211110091914_ProductTypes.Designer.cs" />
+    <Compile Remove="Migrations\20211110092029_ProductTypes.cs" />
+    <Compile Remove="Migrations\20211110092029_ProductTypes.Designer.cs" />
+    <Compile Remove="Migrations\20211110092427_Product.cs" />
+    <Compile Remove="Migrations\20211110092427_Product.Designer.cs" />
+    <Compile Remove="Migrations\20211110145500_AddProduct_ImageFiles.cs" />
+    <Compile Remove="Migrations\20211110145500_AddProduct_ImageFiles.Designer.cs" />
+    <Compile Remove="Migrations\20211110145734_AddProduct.cs" />
+    <Compile Remove="Migrations\20211110145734_AddProduct.Designer.cs" />
+    <Compile Remove="Migrations\20211110150007_AddProduct_AddHinhAnh.cs" />
+    <Compile Remove="Migrations\20211110150007_AddProduct_AddHinhAnh.Designer.cs" />
+    <Compile Remove="Migrations\20211110150135_EditProduct_AddHinhAnh.cs" />
+    <Compile Remove="Migrations\20211110150135_EditProduct_AddHinhAnh.Designer.cs" />
+    <Compile Remove="Migrations\20211110150248_EditProduct_AddHinhAnh.cs" />
+    <Compile Remove="Migrations\20211110150248_EditProduct_AddHinhAnh.Designer.cs" />
+    <Compile Remove="Migrations\20211110150428_EditProduct_AddImageFiles.cs" />
+    <Compile Remove="Migrations\20211110150428_EditProduct_AddImageFiles.Designer.cs" />
+    <Compile Remove="Migrations\20211110150713_EditUpload_RemoveImageFile.cs" />
+    <Compile Remove="Migrations\20211110150713_EditUpload_RemoveImageFile.Designer.cs" />
+    <Compile Remove="Migrations\20211110150855_EditProduct_AddImageFiles.cs" />
+    <Compile Remove="Migrations\20211110150855_EditProduct_AddImageFiles.Designer.cs" />
+    <Compile Remove="Migrations\20211110150957_EditProduct_AddImageFiles.cs" />
+    <Compile Remove="Migrations\20211110150957_EditProduct_AddImageFiles.Designer.cs" />
+    <Compile Remove="Migrations\20211110151121_EditProduct_AddImageFiles.cs" />
+    <Compile Remove="Migrations\20211110151121_EditProduct_AddImageFiles.Designer.cs" />
+    <Compile Remove="Migrations\20211110152016_Upload.cs" />
+    <Compile Remove="Migrations\20211110152016_Upload.Designer.cs" />
+    <Compile Remove="Migrations\20211111041851_EditProduct_AddHinhAnh.cs" />
+    <Compile Remove="Migrations\20211111041851_EditProduct_AddHinhAnh.Designer.cs" />
+    <Compile Remove="Migrations\20211111041928_EditProduct_AddHinhAnh.cs" />
+    <Compile Remove="Migrations\20211111041928_EditProduct_AddHinhAnh.Designer.cs" />
+    <Compile Remove="Migrations\20211111042001_EditProduct_RemoveImage.cs" />
+    <Compile Remove="Migrations\20211111042001_EditProduct_RemoveImage.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.Core" Version="2.41.1" />
+    <PackageReference Include="IKVM" Version="8.1.5717" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.18" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.21" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.21" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.21" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.21">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.21" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="toastr" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\NewFolder\" />
+    <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\avt\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets-shop\fonts\fontawesome-webfont3e6e3e6e.svg" />
+    <None Include="wwwroot\assets-shop\fonts\fontawesome-webfont3e6e3e6e.woff2" />
+    <None Include="wwwroot\assets-shop\fonts\ionicons28b528b5.svg" />
+    <None Include="wwwroot\assets-shop\fonts\Material-Design-Iconic-Fontd1f1d1f1.woff2" />
+    <None Include="wwwroot\assets-shop\js\main.js" />
+    <None Include="wwwroot\assets-shop\js\plugins.js" />
+  </ItemGroup>
+
+</Project>
