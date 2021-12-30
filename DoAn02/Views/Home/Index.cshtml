@@ -7,7 +7,7 @@
     }
     else
     {
-        username = "Khách";
+        username = "Con Cặc";
     }
 }
 
@@ -15,7 +15,7 @@
     <h1 class="display-4">Welcome</h1>
     <p>Thời gian hiện tại: @DateTime.Now</p>
     <p>Tên : @username</p>
-    @if(@username != "Khách")
+    @if(@username != "Con Cặc")
     {
         <a asp-controller="Accounts" asp-action="Logout">Logout</a>
     }
