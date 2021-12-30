@@ -2,163 +2,22 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Quản Lý</title>
-
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="~/assets/css/bootstrap.css">
-
-    <link rel="stylesheet" href="~/assets/vendors/iconly/bold.css">
-
-    <link rel="stylesheet" href="~/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
-    <link rel="stylesheet" href="~/assets/vendors/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="~/assets/css/app.css">
-    <link rel="shortcut icon" href="~/assets/images/favicon.svg" type="image/x-icon">
-    <link rel="stylesheet" href="~/assets/vendors/toastify/toastify.css">
-    <link rel="stylesheet" href="~/assets/vendors/sweetalert2/sweetalert2.min.css">
-
+    @RenderSection(name: "head", required: false)
 </head>
 
 <body>
     <div id="app">
         <div id="main" class="layout-horizontal">
-            <header class="mb-5">
-                <div class="header-top">
-                    <div class="container">
-                        <div class="logo">
-                            <a asp-controller="Admin" asp-action="Index"><img src="~/assets/images/logo/logo.png" alt="Logo" srcset=""></a>
-                        </div>
-                        <div class="header-top-right">
-
-                            <!-- Burger button responsive -->
-                            <a href="#" class="burger-btn d-block d-xl-none">
-                                <i class="bi bi-justify fs-3"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <nav class="main-navbar">
-                    <div class="container">
-                        <ul>
-
-
-
-                            <li class="menu-item  ">
-                                <a asp-controller="Admin" asp-action="Index" class='menu-link'>
-                                    <i class="bi bi-grid-fill"></i>
-                                    <span>Dashboard</span>
-                                </a>
-                            </li>
-
-                            <li class="menu-item  ">
-                                <a asp-controller="Home" asp-action="Index" class='menu-link'>
-                                    <i class="bi bi-grid-fill"></i>
-                                    <span>Shop</span>
-                                </a>
-                            </li>
-
-                            <li class="menu-item  has-sub">
-                                <a href="#" class='menu-link'>
-                                    <i class="bi bi-stack"></i>
-                                    <span>Quản Lý Tài Khoản</span>
-                                </a>
-                                <div class="submenu ">
-                                    <!-- Wrap to submenu-group-wrapper if you want 3-level submenu. Otherwise remove it. -->
-                                    <div class="submenu-group-wrapper">
-
-                                        <ul class="submenu-group">
-
-                                            <li class="submenu-item  ">
-                                                <a asp-controller="Accounts" asp-action="Create"
-                                                   class='submenu-link'>Thêm Tài Khoản</a>
-                                            </li>
-
-                                            <li class="submenu-item  ">
-                                                <a asp-controller="Accounts" asp-action="Index"
-                                                   class='submenu-link'>Danh Sách TK</a>
-                                            </li>
-
-
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-
-
-
-                            <li class="menu-item  has-sub">
-                                <a href="#" class='menu-link'>
-                                    <i class="bi bi-stack"></i>
-                                    <span>Quản Lý Sản Phẩm</span>
-                                </a>
-                                <div class="submenu ">
-                                    <!-- Wrap to submenu-group-wrapper if you want 3-level submenu. Otherwise remove it. -->
-                                    <div class="submenu-group-wrapper">
-
-                                        <ul class="submenu-group">
-
-                                            <li class="submenu-item  ">
-                                                <a asp-controller="Products" asp-action="Create"
-                                                   class='submenu-link'>Thêm Sản Phẩm</a>
-                                            </li>
-
-                                            <li class="submenu-item  ">
-                                                <a asp-controller="Products" asp-action="Index"
-                                                   class='submenu-link'>Danh Sách SP</a>
-                                            </li>
-
-
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-
-
-                            <li class="menu-item ">
-                                <a asp-controller="ProductTypes" asp-action="Index" class='menu-link'>
-                                    <i class="bi bi-stack"></i>
-                                    <span>QL Loại Sản Phẩm</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-
-            </header>
+            @RenderSection(name: "header", required: false)
 
             @RenderBody()
 
-            <footer>
-                <div class="container">
-                    <div class="footer clearfix mb-0 text-muted">
-                        <div class="float-start">
-                            <p>2021 &copy; Mazer</p>
-                        </div>
-                        <div class="float-end">
-                            <p>
-                                Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a href="http://ahmadsaugi.com">A. Saugi</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            @RenderSection(name: "footer", required: false)
 
         </div>
     </div>
-    <script src="~/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
-
-    <script src="~/assets/vendors/apexcharts/apexcharts.js"></script>
-    <script src="~/assets/js/pages/dashboard.js"></script>
-
-    <script src="~/assets/js/pages/horizontal-layout.js"></script>
-
-    <script src="~/assets/js/extensions/sweetalert2.js"></script>
-    <script src="~/assets/vendors/sweetalert2/sweetalert2.all.min.js"></script>
-
-
+    @RenderSection(name: "script", required: false)
 </body>
 
 </html>
+

@@ -44,7 +44,10 @@ namespace DoAn02.Controllers
         {
             return View();
         }
-
+        public IActionResult Login()
+        {
+            return View();
+        }
         public IActionResult Details()
         {
             return View();
