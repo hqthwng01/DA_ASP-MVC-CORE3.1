@@ -1,8 +1,10 @@
-﻿@model IEnumerable<DoAn02.Models.Product>
-
+﻿@model DoAn02.Models.Product
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
 @{
     ViewData["Title"] = "Home Page";
-    Layout = "_LayoutShop";
+    Layout = "_LayoutDetailUser";
     string username = ViewBag.AccountUsername;
     if (ViewBag.AccountUsername != null)
     {
@@ -12,25 +14,6 @@
     {
         username = "Khách";
     }
-
-
-}
-
-@section head{
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>iShop - Cửa Hàng Điện Thoại Di Động Online</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="~/assets-shop/img/favicon.ico">
-
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="~/assets-shop/css/plugins.css">
-
-    <!-- Main Style CSS -->
-    <link rel="stylesheet" href="~/assets-shop/css/style.css">
-    <link rel="stylesheet" href="~/assets-shop/css/custom.css">
 }
 @section header{
 
@@ -69,9 +52,9 @@
                         <div class="col-lg-9 col-md-6">
                             <div class="middel_right">
                                 <div class="search_container">
-                                    <form asp-controller="Home" asp-action="Index" method="get">
+                                    <form action="#">
                                         <div class="search_box">
-                                            <input name="SearchString" placeholder="Nhập sản phẩm..." type="text">
+                                            <input placeholder="Nhập sản phẩm..." type="text">
                                             <button type="submit">Tìm Kiếm</button>
                                         </div>
                                     </form>
@@ -174,218 +157,160 @@
         </div>
     </header>
 }
-
-<!--slider area start-->
-<section class="slider_section d-flex align-items-center" data-bgimg="~/assets-shop/img/slider/slider3.jpg">
-    <div class="slider_area owl-carousel">
-        <div class="single_slider d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6 col-md-6">
-                        <div class="slider_content">
-                            <h1>Iphone 13 Pro Max CHÍNH HÃNG </h1>
-                            <h2>Ủy Quyền Từ Apple Store</h2>
-                            <p>khuyến mãi đến<span> 20% </span>trong tháng này.</p>
-                            <a class="button" href="product-details.html">Mua Ngay</a>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-md-6">
-                        <div class="slider_content">
-                            <img src="~/assets-shop/img/product/ip13_rgb.png" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="single_slider d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6 col-md-6">
-                        <div class="slider_content">
-                            <h1>CAMERA TỐT NHẤT TRONG PHÂN KHÚC</h1>
-                            <h2>100% LINH HOẠT</h2>
-                            <p>SALE ĐẾN<span> 20% </span> TRONG THÁNG NÀY</p>
-                            <a class="button" href="product-details.html">MUA NGAY</a>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-md-6">
-                        <div class="slider_content">
-                            <img src="~/assets-shop/img/product/samsung-rbg.png" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="single_slider d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6 col-md-6">
-                        <div class="slider_content">
-                            <h1>XIAOMI REDMI NOTE 10 GIÁ RẺ TRONG PHÂN KHÚC</h1>
-                            <h2>PHÂN KHÚC MẠNH NHẤT TRONG TẦM GIÁ</h2>
-                            <p>ĐANG KHUYẾN MÃI VỚI<span> 20% </span>TRONG THÁNG NÀY</p>
-                            <a class="button" href="product-details.html">MUA NGAY</a>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-md-6">
-                        <div class="slider_content">
-                            <img src="~/assets-shop/img/product/xiaomi-rbg.png" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--slider area end-->
-<!--Tranding product-->
-<section class="pt-60 pb-30 gray-bg">
+<div class="product_details mt-60 mb-60">
     <div class="container">
         <div class="row">
-            <div class="col text-center">
-                <div class="section-title">
-                    <h2>SẢN PHẨM</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            @foreach (var item in Model)
-            {
-                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
-                    <div class="single-tranding">
-                        <a asp-action="Details" asp-route-id="@item.Id">
-                            <div class="tranding-pro-img">
-                                <img src="~/img/@item.Image" alt="">
-                            </div>
-                            <div class="tranding-pro-title">
-                                <h3>@item.Name</h3>
-                                <h4>@item.ProductType.Name</h4>
-                                <div class="btn btn-primary">
-                                    @if (@username != "Khách")
-                                    {
-                                        <a asp-controller="Carts" asp-action="Add" asp-route-id="@item.Id">Thêm vào giỏ hàng</a>
-                                    }
-                                    else
-                                    {
-                                        <a class="btn btn-primary" asp-controller="Home" asp-action="Login">Thêm vào giỏ hàng</a>
-                                    }
-                                </div>
-                            </div>
-                            <div class="tranding-pro-price">
-                                <div class="price_box">
-                                    <span class="current_price">@item.Price.ToString("#,##VNĐ")</span>
-                                    <span class="old_price">@item.Price.ToString("#,##VNĐ")</span>
-                                </div>
-                            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="product-details-tab">
+                    <div id="img-1" class="zoomWrapper single-zoom">
+                        <a href="#">
+                            <img id="zoom1" src="~/img/@Model.Image" data-zoom-image="~/img/@Model.Image" alt="big-1">
                         </a>
                     </div>
+                    <div class="single-zoom-thumb">
+                        <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
+                            <li>
+                                <a href="#" class="elevatezoom-gallery active" data-update="" data-image="~/img/@Model.Image" data-zoom-image="~/img/@Model.Image">
+                                    <img src="~/img/@Model.Image" alt="zo-th-1" />
+                                </a>
+
+                            </li>
+                            <li>
+                                <a href="#" class="elevatezoom-gallery active" data-update="" data-image="~/img/@Model.Image" data-zoom-image="~/img/@Model.Image">
+                                    <img src="~/img/@Model.Image" alt="zo-th-1" />
+                                </a>
+
+                            </li>
+                            <li>
+                                <a href="#" class="elevatezoom-gallery active" data-update="" data-image="~/img/@Model.Image" data-zoom-image="~/img/@Model.Image">
+                                    <img src="~/img/@Model.Image" alt="zo-th-1" />
+                                </a>
+
+                            </li>
+                            <li>
+                                <a href="#" class="elevatezoom-gallery active" data-update="" data-image="~/img/@Model.Image" data-zoom-image="~/assets-shop/img/product/details-1.jpg">
+                                    <img src="~/img/@Model.Image" alt="zo-th-1" />
+                                </a>
+
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            }
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="product_d_right">
+                    <form action="#">
+
+                        <h1>@Model.Name</h1>
+                        <div class=" product_ratting">
+                            <ul>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li class="review"><a href="#"> (250 reviews) </a></li>
+                            </ul>
+
+                        </div>
+                        <div class="price_box">
+                            <span class="current_price">@Model.Price.ToString("#,##VNĐ")</span>
+                            <span class="old_price">$80.00</span>
+
+                        </div>
+                        <div class="product_desc">
+                            <ul>
+                                <li>Còn hàng: @Model.Stock</li>
+                                <li>Miễn phí giao hàng*</li>
+                            </ul>
+                        </div>
+                        <div class="product_variant quantity">
+                            <label>Số lượng</label>
+                            <input min="1" max="100" value="1" type="number">
+                            <button asp-controller="Carts" asp-action="Add" class="button" type="submit">Thêm vào giỏ hàng</button>
+
+                        </div>
+                        <div class=" product_d_action">
+                            <ul>
+                                <li><a href="#" title="Add to wishlist">+ Thêm vào danh sách yêu thích</a></li>
+                                <li><a href="#" title="Add to wishlist">+ So sánh</a></li>
+                            </ul>
+                        </div>
+                        <div class="product_meta">
+                            <span>Danh Mục: <a href="#">@Model.ProductType.Name</a></span>
+                        </div>
+
+                    </form>
+                    <div class="priduct_social">
+                        <ul>
+                            <li><a class="facebook" href="#" title="facebook"><i class="fa fa-facebook"></i> Like</a></li>
+                            <li><a class="twitter" href="#" title="twitter"><i class="fa fa-twitter"></i> tweet</a></li>
+                            <li><a class="pinterest" href="#" title="pinterest"><i class="fa fa-pinterest"></i> save</a></li>
+                            <li><a class="google-plus" href="#" title="google +"><i class="fa fa-google-plus"></i> share</a></li>
+                            <li><a class="linkedin" href="#" title="linkedin"><i class="fa fa-linkedin"></i> linked</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
-</section><!--Tranding product-->
-<!--Testimonials-->
-<section class="pb-60 pt-60 gray-bg">
+</div>
+<!--product details end-->
+<!--product info start-->
+<div class="product_d_info mb-60">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-10">
-                <div class="testimonial_are">
-                    <div class="testimonial_active owl-carousel">
-                        <article class="single_testimonial">
-                            <figure>
-                                <div class="testimonial_thumb">
-                                    <a href="#"><img src="~/assets-shop/img/about/team-3.jpg" alt=""></a>
-                                </div>
-                                <figcaption class="testimonial_content">
-                                    <p>Các sản phẩm và chất lượng dịch vụ hỗ trợ đều tốt</p>
-                                    <h3><a href="#">Kathy Young</a><span> - CEO of SunPark</span></h3>
-                                </figcaption>
+        <div class="row">
+            <div class="col-12">
+                <div class="product_d_inner">
+                    <div class="product_info_button">
+                        <ul class="nav" role="tablist">
+                            <li>
+                                <a class="active" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">Mô tả</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#sheet" role="tab" aria-controls="sheet" aria-selected="false">Chi tiết</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="info" role="tabpanel">
+                            <div class="product_info_content">
+                                <p>@Model.Description</p>
 
-                            </figure>
-                        </article>
-                        <article class="single_testimonial">
-                            <figure>
-                                <div class="testimonial_thumb">
-                                    <a href="#"><img src="~/assets-shop/img/about/team-1.jpg" alt=""></a>
-                                </div>
-                                <figcaption class="testimonial_content">
-                                    <p>Các sản phẩm và chất lượng dịch vụ hỗ trợ đều tốt</p>
-                                    <h3><a href="#">John Sullivan</a><span> - Customer</span></h3>
-                                </figcaption>
-
-                            </figure>
-                        </article>
-                        <article class="single_testimonial">
-                            <figure>
-                                <div class="testimonial_thumb">
-                                    <a href="#"><img src="~/assets-shop/img/about/team-2.jpg" alt=""></a>
-                                </div>
-                                <figcaption class="testimonial_content">
-                                    <p>Các sản phẩm và chất lượng dịch vụ hỗ trợ đều tốt</p>
-                                    <h3><a href="#">Jenifer Brown</a><span> - Manager of AZ</span></h3>
-                                </figcaption>
-
-                            </figure>
-                        </article>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="sheet" role="tabpanel">
+                            <div class="product_d_table">
+                                <form action="#">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td class="first_child">Compositions</td>
+                                                <td>Polyester</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="first_child">Styles</td>
+                                                <td>Girly</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="first_child">Properties</td>
+                                                <td>Short Dress</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                            <div class="product_info_content">
+                                <p>Fashion has been creating well-designed collections since 2010. The brand offers feminine designs delivering stylish separates and statement dresses which have since evolved into a full ready-to-wear collection in which every item is a vital part of a woman's wardrobe. The result? Cool, easy, chic looks with youthful elegance and unmistakable signature style. All the beautiful pieces are made in Italy and manufactured with the greatest attention. Now Fashion extends to a range of accessories including shoes, hats, belts and more!</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</section><!--/Testimonials-->
-<!--shipping area start-->
-<section class="shipping_area">
-    <div class="container">
-        <div class=" row">
-            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                <div class="single_shipping">
-                    <div class="shipping_icone">
-                        <img src="assets/img/about/shipping1.png" alt="">
-                    </div>
-                    <div class="shipping_content">
-                        <h2>Giao hàng miễn phí</h2>
-                        <p>Miễn phí vẫn chuyễn trên toàn quốc</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                <div class="single_shipping">
-                    <div class="shipping_icone">
-                        <img src="assets/img/about/shipping2.png" alt="">
-                    </div>
-                    <div class="shipping_content">
-                        <h2>Hỗ trợ 24/7</h2>
-                        <p>Liên hệ hỗ trợ tất cả các giờ trong ngày</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                <div class="single_shipping">
-                    <div class="shipping_icone">
-                        <img src="assets/img/about/shipping3.png" alt="">
-                    </div>
-                    <div class="shipping_content">
-                        <h2>100% HOÀN TIỀN</h2>
-                        <p>Đổi trả sau 30 ngày sử dụng</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                <div class="single_shipping">
-                    <div class="shipping_icone">
-                        <img src="assets/img/about/shipping4.png" alt="">
-                    </div>
-                    <div class="shipping_content">
-                        <h2>BẢO MẬT THANH TOÁN</h2>
-                        <p>Bảo mật các hình thức thanh toán cho khách hàng</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
+</div>
 @section footer{
     <footer class="footer_widgets">
         <div class="footer_top">
@@ -479,10 +404,4 @@
             </div>
         </div>
     </footer>
-}
-@section script{
-    <!-- Plugins JS -->
-    <script src="~/assets-shop/js/plugins.js"></script>
-    <!-- Main JS -->
-    <script src="~/assets-shop/js/main.js"></script>
 }

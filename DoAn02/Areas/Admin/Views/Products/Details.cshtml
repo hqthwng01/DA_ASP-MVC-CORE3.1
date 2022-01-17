@@ -1,0 +1,68 @@
+﻿@model DoAn02.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<!-- Bordered table start -->
+<section class="section">
+    <div class="row" id="table-bordered">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-content">
+                    <h1> CHI TIẾT SẢN PHẨM</h1>
+                    <!-- table bordered -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0">
+                            <thead>
+                                <tr>
+                                    <th>MÃ SKU</th>
+                                    <th>TÊN SẢN PHẨM</th>
+                                    <th>MÔ TẢ</th>
+                                    <th>GIÁ</th>
+                                    <th>STOCK</th>
+                                    <th>ID LOẠI SP</th>
+                                    <th>TRẠNG THÁI</th>
+                                    <th>HÌNH ẢNH</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-bold-500">@Html.DisplayFor(model => model.SKU)</td>
+                                    <td> @Html.DisplayFor(model => model.Name)</td>
+                                    <td class="text-bold-500"> @Html.DisplayFor(model => model.Description)</td>
+                                    <td>@Html.DisplayFor(model => model.Price)</td>
+                                    <td> @Html.DisplayFor(model => model.Stock)</td>
+                                    <td> @Html.DisplayFor(model => model.ProductType)</td>
+                                    <td> @Html.DisplayFor(model => model.ProductTypeId)</td>
+                                    <td>
+                                        @if (Model.Status == true)
+                                        {
+                                            <span class="badge bg-success text-white">ACTIVE</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-primary text-white">UNACTIVE</span>
+                                        }
+                                    </td>
+                                    <td> <img src="~/img/@Model.Image" asp-append-version="true" style="width:100px; height:100px"></td>
+                                    <td>
+                                        <a href="#">
+                                            <i class="badge-circle badge-circle-light-secondary font-medium-1"
+                                               data-feather="mail"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Sửa</a> |
+                                <a asp-action="Index" class="btn btn-primary">Quay Trở Lại</a>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Bordered table end -->

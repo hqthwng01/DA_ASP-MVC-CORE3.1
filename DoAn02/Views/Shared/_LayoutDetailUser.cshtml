@@ -1,0 +1,62 @@
+﻿<!doctype html>
+<html class="no-js" lang="en">
+
+<!-- product-details.html  03:24:28 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Drophut - Single Product eCommerce Template</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets-shop/img/favicon.ico">
+
+    <!-- CSS
+    ========================= -->
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="~/assets-shop/css/plugins.css">
+
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="~/assets-shop/css/style.css">
+    <link rel="stylesheet" href="~/assets-shop/css/custom.css">
+
+</head>
+
+<body>
+
+    <!--header area start-->
+    <!--Offcanvas menu area start-->
+    @RenderSection(name: "header", required: false);
+    <!--header area end-->
+    <!--breadcrumbs area start-->
+    <div class="breadcrumbs_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb_content">
+                        <ul>
+                            <li><a href="index-2.html">home</a></li>
+                            <li>Product details</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--breadcrumbs area end-->
+    <!--product details start-->
+    @RenderBody()
+    <!--product info end-->
+    <!--footer area start-->
+    @RenderSection(name: "footer", required: false)
+    <!--footer area end-->
+    <!-- JS
+    ============================================ -->
+    <!-- Plugins JS -->
+    <script src="~/assets-shop/js/plugins.js"></script>
+
+    <!-- Main JS -->
+    <script src="~/assets-shop/js/main.js"></script>
+</body>
+<!-- product-details.html  03:24:28 GMT -->
+</html>

@@ -1,0 +1,103 @@
+﻿@model IEnumerable<DoAn02.Models.Account>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<!-- Hoverable rows start -->
+<section class="section">
+    <div class="row" id="table-hover-row">
+        <div class="col-12">
+            <div class="card">
+                <h1>Danh Sách Tài Khoản</h1>
+                <form asp-controller="Accounts" asp-action="Index" method="get">
+                    <p>
+                        Nhập: <input type="text" name="SearchString" placeholder="Tìm kiếm..." class="input-css" />
+                        <input type="submit" value="Tìm Kiếm" class="btn btn-danger" />
+                    </p>
+                </form>
+
+                <div class="card-content">
+                    <div class="card-body">
+                        <p>
+                            <a asp-controller="Accounts" asp-action="Create" class="btn btn-info">TẠO TÀI KHOẢN</a>
+                        </p>
+                    </div>
+                    <!-- table hover -->
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>USERNAME</th>
+                                    <th>PASSWORD</th>
+                                    <th>EMAIL</th>
+                                    <th>SĐT</th>
+                                    <th>ĐỊA CHỈ</th>
+                                    <th>HỌ VÀ TÊN</th>
+                                    <th>ADMIN</th>
+                                    <th>TRẠNG THÁI</th>
+                                    <th>HÌNH ẢNH</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-bold-500">@item.Username</td>
+                                        <td>@item.Password</td>
+                                        <td class="text-bold-500">@item.Email</td>
+                                        <td>@item.Phone</td>
+                                        <td>@item.Address</td>
+                                        <td>@item.FullName</td>
+                                        <td>
+                                            @if (item.IsAdmin == true)
+                                            {
+                                                <span class="badge bg-success text-white">ACTIVE</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-primary text-white">UNACTIVE</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.Status == true)
+                                            {
+                                                <span class="badge bg-success text-white">ACTIVE</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-primary text-white">UNACTIVE</span>
+                                            }
+                                        </td>
+                                        <td><img src="~/avt/@item.Avatar" style="width:100px" avatar avatar-lg></td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Sửa</a> |
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Chi Tiết</a> |
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Xóa</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hoverable rows end -->
+<style>
+    .card .card-body {
+        padding: 23px 0 10px 8px;
+    }
+    .card {
+        padding: 1rem;
+        margin: 1rem;
+    }
+    input.input-css {
+        border-radius: 10px;
+        padding: 0.4rem;
+    }
+    </style>

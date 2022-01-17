@@ -7,77 +7,42 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DoAn02.Data;
 using DoAn02.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 using Microsoft.AspNetCore.Http;
 
 namespace DoAn02.Controllers
 {
-    public class HomeController : Controller
+    [Area("Admin")]
+    public class ProductsController : Controller
     {
         private readonly DoAnContext _context;
+        private readonly IWebHostEnvironment _he;
 
-        public HomeController(DoAnContext context)
+        public ProductsController(DoAnContext context, IWebHostEnvironment he)
         {
             _context = context;
+            _he = he;
         }
 
-        // GET: Home
+        // GET: Products
         public async Task<IActionResult> Index(string SearchString = "")
         {
-            if(HttpContext.Session.Keys.Contains("AccountUsername"))
-            {
-                ViewBag.AccountUsername = HttpContext.Session.GetString("AccountUsername");
-            }
-            var doAnContext = _context.Products.Include(p => p.ProductType);
-
+            var kq = _context.Products.Include(p => p.ProductType);
             List<Product> products;
             if (SearchString != "" && SearchString != null)
             {
                 products = _context.Products
-                .Where(p => p.Name.Contains(SearchString))
+                .Where(p => p.SKU.Contains(SearchString))
                 .ToList();
                 return View(products);
             }
-            return View(await doAnContext.ToListAsync());
-        }   
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Login(string Username, string Password)
-        {
-            Account acc = _context.Accounts.Where(a => a.Username == Username && a.Password == Password).FirstOrDefault();
-            if (acc != null)
-            {
-                HttpContext.Session.SetInt32("AccountID", acc.Id);
-                HttpContext.Session.SetString("AccountUsername", acc.Username);
-                return RedirectToAction("Index", "Home");
-            }
-            return View();
+            return View(await kq.ToListAsync());
         }
 
-        public IActionResult Logout()
-        {
-            /*
-            HttpContext.Response.Cookies.Append("AccountID", "", new CookieOptions { Expires = DateTime.Now.AddDays(-1) });
-            HttpContext.Response.Cookies.Append("AccountUsername", "", new CookieOptions { Expires = DateTime.Now.AddDays(-1) });
-            */
-            //HUY 1 THANH PHAN TRONG SESSION
-           // HttpContext.Session.Remove("AccountID");
-            //HUY TOAN BO SESSION
-            HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Home");
-        }
-
-        // GET: Home/Details/5
+        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (HttpContext.Session.Keys.Contains("AccountUsername"))
-            {
-                ViewBag.AccountUsername = HttpContext.Session.GetString("AccountUsername");
-            }
-
             if (id == null)
             {
                 return NotFound();
@@ -94,31 +59,46 @@ namespace DoAn02.Controllers
             return View(product);
         }
 
-        // GET: Home/Create
+        // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Id");
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Name");
             return View();
         }
 
-        // POST: Home/Create
+        // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SKU,Name,Description,Price,Stock,ProductTypeId,Image,Status")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,SKU,Name,Description,Price,Stock,ProductTypeId,Image,ImageFile,Status")] Product product, IFormFile ImageFile)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+                if (product.ImageFile != null)
+                {
+                    var filename = product.Id.ToString() + Path.GetExtension(product.ImageFile.FileName);
+                    var uploadpath = Path.Combine(_he.WebRootPath, "img");
+                    var filepath = Path.Combine(uploadpath, filename);
+                    using (FileStream fs = System.IO.File.Create(filepath))
+                    {
+                        product.ImageFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                    product.Image = filename;
+                    await Task.Delay(2000);
+                    _context.Products.Update(product);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Id", product.ProductTypeId);
             return View(product);
         }
 
-        // GET: Home/Edit/5
+        // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -135,12 +115,12 @@ namespace DoAn02.Controllers
             return View(product);
         }
 
-        // POST: Home/Edit/5
+        // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SKU,Name,Description,Price,Stock,ProductTypeId,Image,Status")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SKU,Name,Description,Price,Stock,ProductTypeId,Image,ImageFile,Status")] Product product, IFormFile ImageFile)
         {
             if (id != product.Id)
             {
@@ -149,6 +129,22 @@ namespace DoAn02.Controllers
 
             if (ModelState.IsValid)
             {
+                if (product.ImageFile != null)
+                {
+                    var filename = product.Id.ToString() + Path.GetExtension(product.ImageFile.FileName);
+                    var uploadpath = Path.Combine(_he.WebRootPath, "img");
+                    var filepath = Path.Combine(uploadpath, filename);
+                    using (FileStream fs = System.IO.File.Create(filepath))
+                    {
+                        product.ImageFile.CopyTo(fs);
+                        fs.Flush();
+                    }
+                    product.Image = filename;
+                    await Task.Delay(2000);
+                    _context.Entry(product).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+
                 try
                 {
                     _context.Update(product);
@@ -171,7 +167,7 @@ namespace DoAn02.Controllers
             return View(product);
         }
 
-        // GET: Home/Delete/5
+        // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -190,7 +186,7 @@ namespace DoAn02.Controllers
             return View(product);
         }
 
-        // POST: Home/Delete/5
+        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

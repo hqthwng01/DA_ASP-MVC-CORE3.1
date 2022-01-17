@@ -33,7 +33,7 @@ namespace DoAn02
                 session.IdleTimeout = new TimeSpan(7, 0, 0, 0);
             });
             services.AddControllersWithViews();
-            services.AddDbContext<DoAnContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DoAn")));
+            services.AddDbContext<DoAnContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DBDOAN")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +60,10 @@ namespace DoAn02
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "Admin",
+                    pattern: "{area:exists}/{controller=Products}/{action=Index}/{id?}");
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
