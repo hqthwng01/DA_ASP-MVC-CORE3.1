@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DoAn02.Data;
 using DoAn02.Models;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace DoAn02.Areas.Admin.Controllers
 {
@@ -15,6 +16,37 @@ namespace DoAn02.Areas.Admin.Controllers
     public class CartsController : Controller
     {
         private readonly DoAnContext _context;
+        //public const string CARTKEY = "cart";
+        //private readonly IHttpContextAccessor _context2;
+        //private readonly HttpContext HttpContext;
+
+        //// Lấy cart từ Session (danh sách CartItem)
+        //List<Cart> GetCartItems()
+        //{
+
+        //    var session = HttpContext.Session;
+        //    string jsoncart = session.GetString(CARTKEY);
+        //    if (jsoncart != null)
+        //    {
+        //        return JsonConvert.DeserializeObject<List<Cart>>(jsoncart);
+        //    }
+        //    return new List<Cart>();
+        //}
+
+        //// Xóa cart khỏi session
+        //void ClearCart()
+        //{
+        //    var session = HttpContext.Session;
+        //    session.Remove(CARTKEY);
+        //}
+
+        //// Lưu Cart (Danh sách CartItem) vào session
+        //void SaveCartSession(List<Cart> ls)
+        //{
+        //    var session = HttpContext.Session;
+        //    string jsoncart = JsonConvert.SerializeObject(ls);
+        //    session.SetString(CARTKEY, jsoncart);
+        //}
 
         public CartsController(DoAnContext context)
         {
@@ -197,7 +229,7 @@ namespace DoAn02.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Pay([Bind("ShippingAddress,ShippingPhone")] Invoice invoice)
+        public IActionResult Pay([Bind("ShippingAddress,ShippingPhone")]Invoice invoice)
         {
             string username = HttpContext.Session.GetString("AccountUsername");
 

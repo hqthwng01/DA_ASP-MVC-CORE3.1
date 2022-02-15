@@ -2,9 +2,8 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-
 
 <!-- Hoverable rows start -->
 <section class="section">
@@ -31,7 +30,6 @@
                             <thead>
                                 <tr>
                                     <th>USERNAME</th>
-                                    <th>PASSWORD</th>
                                     <th>EMAIL</th>
                                     <th>SĐT</th>
                                     <th>ĐỊA CHỈ</th>
@@ -46,7 +44,6 @@
                                 {
                                     <tr>
                                         <td class="text-bold-500">@item.Username</td>
-                                        <td>@item.Password</td>
                                         <td class="text-bold-500">@item.Email</td>
                                         <td>@item.Phone</td>
                                         <td>@item.Address</td>

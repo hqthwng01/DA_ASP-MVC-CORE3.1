@@ -1,0 +1,99 @@
+﻿@model IEnumerable<DoAn02.Models.InvoiceDetail>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            <h1>CHI TIẾT HÓA ĐƠN</h1>
+            @*<p>
+                <a asp-area="Admin" asp-controller="Invoices" asp-action="Create" class="btn btn-primary">TẠO HÓA ĐƠN</a>
+            </p>*@
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Hóa Đơn
+                        </th>
+                        <th>
+                            Thời Gian
+                        </th>
+                        <th>
+                            Họ Tên
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Số Điện Thoại
+                        </th>
+                        <th>
+                            Tên sản phẩm
+                        </th>
+                        <th>
+                            Ảnh
+                        </th>
+                        <th>
+                            Số Lượng
+                        </th>
+                        <th>
+                            Đơn Giá
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Invoice.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Invoice.IssuedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Invoice.Fullname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Invoice.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Invoice.ShippingPhone)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.Product.Id)
+                        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Product.Name)
+                        </td>
+                        <td>
+                            <img src="~/img/@item.Product.Image" style="width:100px" avatar avatar-lg>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @item.UnitPrice.ToString("#,##0 VNĐ")
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class='bx bx-edit'></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary"><i class='bx bx-show'></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class='bx bx-trash'></i></a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

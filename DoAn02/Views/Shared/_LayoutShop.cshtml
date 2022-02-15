@@ -18,5 +18,6 @@
     </div>
     @RenderSection(name: "script", required: false)
 </body>
-
+@await Component.InvokeAsync("Notyf")
+@RenderSection("Scripts", required: false)
 </html>

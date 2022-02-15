@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification;
 using com.sun.tools.doclets.@internal.toolkit;
 using DoAn02.Data;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,7 @@ namespace DoAn02
             });
             services.AddControllersWithViews();
             services.AddDbContext<DoAnContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DBDOAN")));
+            services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

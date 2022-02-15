@@ -1391,6 +1391,22 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   -webkit-transition: 0.5s;
   transition: 0.5s;
 }
+.mini_user {
+    position: absolute;
+    min-width: 200px;
+    padding: 0 28px;
+    background: #fff;
+    border: 0;
+    z-index: 999;
+    right: 0;
+    top: 142%;
+    max-height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    border: 1px solid #ebebeb;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+}
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .mini_cart {
     display: none;

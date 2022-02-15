@@ -1,7 +1,152 @@
 ﻿@model DoAn02.Models.Account
 @{
     ViewData["Title"] = "Đăng Nhập";
-    Layout = "_LayoutLoginUser";
+    Layout = "_LayoutShop";
+    Cart c = ViewBag.Cart;
+    string username = ViewBag.AccountUsername;
+    if (ViewBag.AccountUsername != null)
+    {
+        username = ViewBag.AccountUsername;
+    }
+    else
+    {
+        username = "Khách";
+    }
+}
+@section head{
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>iShop - Cửa Hàng Điện Thoại Di Động Online</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets-shop/img/favicon.ico">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="~/assets-shop/css/plugins.css">
+
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="~/assets-shop/css/style.css">
+    <link rel="stylesheet" href="~/assets-shop/css/custom.css">
+}
+
+@section header{
+
+    <header>
+        <div class="main_header">
+            <!--header top start-->
+            <div class="header_top">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="support_info">
+                                <p>Email: <a href="mailto:">support@ishop.com</a></p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="top_right text-right">
+                                <ul>
+                                    <li><a asp-controller="Home" asp-action="Login">Đăng Kí</a></li>
+                                    <li><a href="checkout.html">Đơn Hàng</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--header top start-->
+            <!--header middel start-->
+            <div class="header_middle">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="logo">
+                                <a asp-controller="Home" asp-action="Index"><img src="~/assets-shop/img/logo/logo.png" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-md-6">
+                            <div class="middel_right">
+                                <div class="search_container">
+                                    <form asp-controller="Home" asp-action="Index" method="get">
+                                        <div class="search_box">
+                                            <input name="SearchString" placeholder="Nhập sản phẩm..." type="text">
+                                            <button type="submit">Tìm Kiếm</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="middel_right_info">
+                                    <div class="header_wishlist">
+                                        <div class="mini_cart_wrapper">
+                                            @if (@username != "Khách")
+                                            {
+                                                <div class="mini_cart_wrapper m-1">
+                                                    <a href="javascript:void(0)"><img src="~/assets-shop/img/user.png" alt=""></a>
+                                                    <!--mini cart-->
+                                                    <div class="mini_cart" style="min-width:250px">
+                                                        <span class="d-block" style="font-weight:600;border-bottom:1px solid #000;text-align:center;margin-bottom:.5rem">THÔNG TIN TÀI KHOẢN</span>
+                                                        <span class="justify-content-center uppercase mb-3" style="font-size:12px">Tên: @username</span>
+                                                        <span class="justify-content-center uppercase d-block" style="font-size:12px">Email: ishop@gmail.com</span>
+                                                        <div class="cart_button mt-3 ">
+                                                            <a asp-controller="Home" asp-action="Logout"><i class='bx bx-exit bx-rotate-180' style='color:#fff'></i> Logout</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            else
+                                            {
+                                                <div class="mini_cart_wrapper m-1">
+                                                    <a asp-controller="Home" asp-action="Login">Đăng nhập <img src="~/assets-shop/img/user.png" alt=""></a>
+                                                    <!--mini cart-->
+                                                    @*<div class="mini_cart">
+                                                            <h5>Tên : @username</h5>
+                                                            <div class="cart_button">
+                                                                <a asp-controller="Home" asp-action="Logout">Đăng Xuất</a>
+                                                            </div>
+                                                        </div>*@
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="mini_cart_wrapper">
+                                        <a asp-controller="Carts" asp-action="Index">Giỏ Hàng <img src="~/assets-shop/img/shopping-bag.png" alt=""></a>
+                                    </div>
+                                    <!--mini cart end-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--header middel end-->
+        <!--header bottom satrt-->
+        <div class="main_menu_area">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="main_menu menu_position">
+                            <nav>
+                                <ul>
+                                    <li><a href="index-2.html">home</a></li>
+                                    <li><a href="product-details.html">Sản Phẩm</a></li>
+
+                                    <li>
+                                        <a href="blog.html">blog</a>
+                                    </li>
+                                    <li><a href="contact.html"> Liên Hệ</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--header bottom end-->
+        </div>
+    </header>
 }
 <div class="breadcrumbs_area">
     <div class="container">
@@ -10,7 +155,7 @@
                 <div class="breadcrumb_content">
                     <ul>
                         <li><a href="index-2.html">home</a></li>
-                        <li>Login</li>
+                        <li>Đăng nhập</li>
                     </ul>
                 </div>
             </div>
@@ -27,8 +172,8 @@
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <div class="account-thumb">
-                                <h2>Login now</h2>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consectetur similique deleniti pariatur enim cumque eum</p>
+                                <h2>Đăng nhập</h2>
+                                <p>Đăng nhập để có thể mua hàng. Và xem những khuyến mãi hấp dẫn ngay nào.</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
@@ -44,13 +189,14 @@
                                     </div>
                                     <div class="single-acc-field boxes">
                                         <input type="checkbox" id="checkbox">
-                                        <label for="checkbox">Remember me</label>
+                                        <label for="checkbox">Ghi nhớ</label>
                                     </div>
                                     <div class="single-acc-field">
-                                        <button type="submit">Login Account</button>
+                                        <button type="submit">Đăng nhập</button>
+                                        
                                     </div>
-                                    <a href="forget-password.html">Forget Password?</a>
-                                    <a href="register.html">Not Account Yet?</a>
+                                    <a href="forget-password.html">Quên mật khẩu?</a>
+                                    <a href="register.html">Chưa có tài khoản?</a>
                                 </form>
                             </div>
                         </div>

@@ -8,26 +8,26 @@ using Microsoft.EntityFrameworkCore;
 using DoAn02.Data;
 using DoAn02.Models;
 
-namespace DoAn02.Controllers
+namespace DoAn02.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class InvoicesController : Controller
+    public class InvoiceDetailsController : Controller
     {
         private readonly DoAnContext _context;
 
-        public InvoicesController(DoAnContext context)
+        public InvoiceDetailsController(DoAnContext context)
         {
             _context = context;
         }
 
-        // GET: Invoices
+        // GET: Admin/InvoiceDetails
         public async Task<IActionResult> Index()
         {
-            var doAnContext = _context.Invoices.Include(i => i.Account);
+            var doAnContext = _context.InvoiceDetails.Include(i => i.Invoice).Include(i => i.Product);
             return View(await doAnContext.ToListAsync());
         }
 
-        // GET: Invoices/Details/5
+        // GET: Admin/InvoiceDetails/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,47 +35,45 @@ namespace DoAn02.Controllers
                 return NotFound();
             }
 
-            var invoice = await _context.Invoices
-                .Include(i => i.Account)
+            var invoiceDetail = await _context.InvoiceDetails
+                .Include(i => i.Invoice)
+                .Include(i => i.Product)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (invoice == null)
+            if (invoiceDetail == null)
             {
                 return NotFound();
             }
-            return View(invoice);       
+
+            return View(invoiceDetail);
         }
 
-        public IActionResult ViewDetails()
-        {
-            var model = new Tuple<IEnumerable<Invoice>, IEnumerable<InvoiceDetail>>(_context.Invoices.Include(i => i.Account), _context.InvoiceDetails.Include(i => i.Invoice).Include(i => i.Product));
-            return View(model);
-        }
-
-        // GET: Invoices/Create
+        // GET: Admin/InvoiceDetails/Create
         public IActionResult Create()
         {
-            ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Password");
+            ViewData["InvoiceId"] = new SelectList(_context.Invoices, "Id", "Id");
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id");
             return View();
         }
 
-        // POST: Invoices/Create
+        // POST: Admin/InvoiceDetails/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,AccountId,IssuedDate,Fullname,Email,ShippingAddress,ShippingPhone,Total,Status")] Invoice invoice)
+        public async Task<IActionResult> Create([Bind("Id,InvoiceId,ProductId,Quantity,UnitPrice")] InvoiceDetail invoiceDetail)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(invoice);
+                _context.Add(invoiceDetail);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Password", invoice.AccountId);
-            return View(invoice);
+            ViewData["InvoiceId"] = new SelectList(_context.Invoices, "Id", "Id", invoiceDetail.InvoiceId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id", invoiceDetail.ProductId);
+            return View(invoiceDetail);
         }
 
-        // GET: Invoices/Edit/5
+        // GET: Admin/InvoiceDetails/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,31 +81,24 @@ namespace DoAn02.Controllers
                 return NotFound();
             }
 
-            var invoice = await _context.Invoices.FindAsync(id);
-            if (invoice == null)
+            var invoiceDetail = await _context.InvoiceDetails.FindAsync(id);
+            if (invoiceDetail == null)
             {
                 return NotFound();
             }
-            ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Password", invoice.AccountId);
-
-            ViewBag.Trangthai = new List<SelectListItem>
-            {
-            new SelectListItem { Text = "Chờ duyệt", Value = "0" },
-            new SelectListItem { Text = "Đang giao hàng", Value = "1" },
-            new SelectListItem { Text = "Hủy đơn", Value = "2" },
-            new SelectListItem { Text = "Đã giao", Value = "3" }
-            };
-            return View(invoice);
+            ViewData["InvoiceId"] = new SelectList(_context.Invoices, "Id", "Id", invoiceDetail.InvoiceId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id", invoiceDetail.ProductId);
+            return View(invoiceDetail);
         }
 
-        // POST: Invoices/Edit/5
+        // POST: Admin/InvoiceDetails/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,AccountId,IssuedDate,Fullname,Email,ShippingAddress,ShippingPhone,Total,Status,StatusId")] Invoice invoice)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,InvoiceId,ProductId,Quantity,UnitPrice")] InvoiceDetail invoiceDetail)
         {
-            if (id != invoice.Id)
+            if (id != invoiceDetail.Id)
             {
                 return NotFound();
             }
@@ -116,12 +107,12 @@ namespace DoAn02.Controllers
             {
                 try
                 {
-                    _context.Update(invoice);
+                    _context.Update(invoiceDetail);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InvoiceExists(invoice.Id))
+                    if (!InvoiceDetailExists(invoiceDetail.Id))
                     {
                         return NotFound();
                     }
@@ -132,11 +123,12 @@ namespace DoAn02.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Password", invoice.AccountId);
-            return View(invoice);
+            ViewData["InvoiceId"] = new SelectList(_context.Invoices, "Id", "Id", invoiceDetail.InvoiceId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id", invoiceDetail.ProductId);
+            return View(invoiceDetail);
         }
 
-        // GET: Invoices/Delete/5
+        // GET: Admin/InvoiceDetails/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,31 +136,32 @@ namespace DoAn02.Controllers
                 return NotFound();
             }
 
-            var invoice = await _context.Invoices
-                .Include(i => i.Account)
+            var invoiceDetail = await _context.InvoiceDetails
+                .Include(i => i.Invoice)
+                .Include(i => i.Product)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (invoice == null)
+            if (invoiceDetail == null)
             {
                 return NotFound();
             }
 
-            return View(invoice);
+            return View(invoiceDetail);
         }
 
-        // POST: Invoices/Delete/5
+        // POST: Admin/InvoiceDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var invoice = await _context.Invoices.FindAsync(id);
-            _context.Invoices.Remove(invoice);
+            var invoiceDetail = await _context.InvoiceDetails.FindAsync(id);
+            _context.InvoiceDetails.Remove(invoiceDetail);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InvoiceExists(int id)
+        private bool InvoiceDetailExists(int id)
         {
-            return _context.Invoices.Any(e => e.Id == id);
+            return _context.InvoiceDetails.Any(e => e.Id == id);
         }
     }
 }

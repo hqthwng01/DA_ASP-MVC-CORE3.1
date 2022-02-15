@@ -1,8 +1,6 @@
-﻿@model Tuple<DoAn02.Models.Invoice, IEnumerable<DoAn02.Models.Cart>>
-
-
+﻿
 @{
-    ViewData["Title"] = "Pay";
+    ViewData["Title"] = "Ordersuccess";
     Layout = "~/Views/Shared/_LayoutShop.cshtml";
     Cart c = ViewBag.Cart;
     Product p = ViewBag.Product;
@@ -16,6 +14,7 @@
         username = "Khách";
     }
 }
+
 @section head{
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -149,101 +148,12 @@
     </header>
 }
 
-<div class="breadcrumbs_area">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="breadcrumb_content">
-                    <ul>
-                        <li><a href="index-2.html">home</a></li>
-                        <li>Thanh toán</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--breadcrumbs area end-->
-<div class="checkout_form" style="margin-top:2rem">
-    <h1 class="ml-2">THÔNG TIN THANH TOÁN</h1>
-    <div class="row">
-        <div class="col-lg-12 col-md-6">
-
-            <form asp-action="Pay" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <h3>ĐIỀN THÔNG TIN</h3>
-                <div class="row">
-                    <div class="col-lg-12 ml-3">
-                        <label>Họ và Tên<span>*</span></label>
-                        <input asp-for="Item1.Fullname" type="text">
-                    </div>
-
-                    <div class="col-lg-12 ml-3">
-                        <label>Email<span>*</span></label>
-                        <input asp-for="Item1.Email" type="text">
-                    </div>
-
-                    <div class="col-12 ml-3">
-                        <label>Địa chỉ<span>*</span></label>
-                        <input asp-for="Item1.ShippingAddress" type="text">
-                    </div>
-                    <div class="col-12 ml-3">
-                        <label>Số điện thoại<span>*</span></label>
-                        <input asp-for="Item1.ShippingPhone" type="text">
-                    </div>
-
-                </div>
-
-                <div class="col-12">
-                    <div class="order-notes">
-                        <label for="order_note">Ghi Chú</label>
-                        <textarea id="order_note" rows="2" placeholder="Giao hàng trong các ngày..."></textarea>
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-6">
-                    <form action="#">
-                        <h3>Hóa đơn của bạn</h3>
-                        <div class="order_table table-responsive">
-                            <table>
-                                <thead>
-
-                                    <tr>
-                                        <th>Hình ảnh</th>
-                                        <th>Sản phẩm và (Số lượng)</th>
-                                        <th>Tạm tính</th>
-                                    </tr>
-
-
-                                </thead>
-                                <tbody>
-                                    @foreach(var item in Model.Item2)
-                                    {
-
-                                    <tr>
-                                        <td><img src="~/img/@item.Product.Image" width="60" /></td>
-                                        <td>@Html.DisplayFor(modelItem => item.Product.Name) <strong>(SL: @Html.DisplayFor(modelItem => item.Quantity))</strong></td>
-                                        <td>@item.Product.Price.ToString("#,##0") VNĐ</td>
-                                    </tr>
-                                    }
-                                </tbody>
-                                <tfoot>
-                                    <tr class="order_total">
-                                        <th></th>
-                                        <th>Tổng tiền</th>
-                                        <td><strong>@ViewBag.CartTotal.ToString("#,##0") VNĐ</strong></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        <div class="payment_method mb-4" style="text-align:center">
-                            <div class="order_button">
-                                <button type="submit">THANH TOÁN</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </form>
-        </div>
+<div class="row">
+    <div class="col-md-6 offset-3 alert alert-success text-center mt-5">
+        <h2>Đơn hàng đã hoàn tất</h2>
+        <p>Vui lòng kiểm tra lại email để xem chi tiết đơn hàng nhé !</p>
+        <hr />
+        <p>Cảm ơn!</p>
     </div>
 </div>
 

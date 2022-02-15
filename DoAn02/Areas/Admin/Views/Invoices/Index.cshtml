@@ -2,71 +2,131 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Code)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Account)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IssuedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShippingAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShippingPhone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Total)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Account.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IssuedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShippingAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShippingPhone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Total)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<!-- Basic Tables start -->
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            <h1>HÓA ĐƠN</h1>
+            <p>
+                <a asp-area="Admin" asp-controller="Invoices" asp-action="Create" class="btn btn-primary">TẠO HÓA ĐƠN</a>
+            </p>
+        </div>
+        <div class="card-body">
+            <table class="table" id="table1">
+                <thead>
+                    <tr>
+                        <th>
+                            Hóa Đơn
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Code)
+                        </th>
+                        <th>
+                            Ngày Tạo
+                        </th>
+                        <th>
+                            Họ Tên
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Địa Chỉ
+                        </th>
+                        <th>
+                            SĐT
+                        </th>
+                        <th>
+                            Tổng Tiền
+                        </th>
+                        <th>
+                            Trạng Thái
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                        @*<td>
+            @Html.DisplayFor(modelItem => item.Account.Username)
+        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IssuedDate)
+                        </td>
+                        <td>
+                            @item.Fullname
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShippingAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShippingPhone)
+                        </td>
+                        <td>
+                            @item.Total.ToString("#,##0VNĐ")
+                        </td>
+                        @*<td>
+            @if(ViewBag.Trangthai == "1")
+            {
+                <span class="badge bg-success text-white">Approved</span>
+            }
+            else
+            {
+                <span class="badge bg-primary text-white">Pending</span>
+            }
+        </td>*@
+                    <td>
+                        @if (item.StatusId == 0)
+                        {
+                            <span class="badge bg-info text-white">Chờ duyệt</span>
+                        }
+                        @if (item.StatusId == 1)
+                        {
+                            <span class="badge bg-primary text-white">Đang giao hàng</span>
+                        }
+                        @if (item.StatusId == 2)
+                        {
+                            <span class="badge bg-danger text-white">Hủy đơn</span>
+                        }
+                        @if (item.StatusId == 3)
+                        {
+                            <span class="badge bg-success text-white">Hoàn tất</span>
+                        }
+                    </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class='bx bx-edit'></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary"><i class='bx bx-show'></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class='bx bx-trash'></i></a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+<script>
+        var path_to_delete;
+        var root = location.protocol + "//" + location.host;
+
+        $("#deleteItem").click(function (e) {
+            path_to_delete = $(this).data('path');
+            $('#myform').attr('action', root + path_to_delete);
+        });
+</script>

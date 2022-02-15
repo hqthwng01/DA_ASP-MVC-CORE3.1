@@ -1,49 +1,407 @@
 ﻿@model IEnumerable<DoAn02.Models.Cart>
 
 @{
+    ViewData["Title"] = "Carts";
+    Layout = "~/Views/Shared/_LayoutShop.cshtml";
     Account acc = ViewBag.Account;
+    string username = ViewBag.AccountUsername;
+    if (ViewBag.AccountUsername != null)
+    {
+        username = ViewBag.AccountUsername;
+    }
+    else
+    {
+        username = "Khách";
+    }
 }
 
-    <html>
-    <head>
-        <meta name="viewport" content="width=device-width" />
-        <title>Index</title>
-    </head>
-    <body>
+@section head{
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>iShop - Cửa Hàng Điện Thoại Di Động Online</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets-shop/img/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
 
-        <h3>Cart Page</h3>
-        <table cellpadding="2" cellspacing="2" border="1">
-            <tr>
-                <th>STT</th>
-                <th>ID</th>
-                <th>Tên SP</th>
-                <th>Ảnh</th>
-                <th>Giá</th>
-                <th>SL</th>
-                <th>Thành Tiền</th>
-            </tr>
-            @foreach (var item in Model)
-            {
-                    <tr>
-                        <td></td>
-                        <td>@item.Product.Id</td>
-                        <td>@item.Product.Name</td>
-                        <td><img src="~/img/@item.Product.Image" width="60" /> </td>
-                        <td>@item.Product.Price.ToString("#,##0") VNĐ</td>
-                        <td>@item.Quantity</td>
-                        <td>@((item.Product.Price * item.Quantity).ToString("#,##0")) VNĐ</td>
-                        <td><a asp-controller="Carts" asp-action="Delete" asp-route-id="@item.Id">Xóa</a></td>
-                    </tr>
-                }
-            <tr>
-                <td align="right" colspan="6">Tổng: </td>
-                <td>@ViewBag.Total.ToString("#,##0") VNĐ</td>
-            </tr>
-        </table>
-        <br>
-        <a asp-controller="Home" asp-action="Index">Tiếp Tục Mua Hàng</a>
-        <div class="btn btn-primary">
-            <a asp-controller="Carts" asp-action="Pay" style="color:white">Thanh Toán</a>
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="~/assets-shop/css/plugins.css">
+
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="~/assets-shop/css/style.css">
+    <link rel="stylesheet" href="~/assets-shop/css/custom.css">
+}
+
+@section header{
+
+    <header>
+        <div class="main_header">
+            <!--header top start-->
+            <div class="header_top">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="support_info">
+                                <p>Email: <a href="mailto:">support@ishop.com</a></p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="top_right text-right">
+                                <ul>
+                                    <li><a asp-controller="Home" asp-action="Login">Đăng Kí</a></li>
+                                    <li><a href="checkout.html">Đơn Hàng</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--header top start-->
+            <!--header middel start-->
+            <div class="header_middle">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="logo">
+                                <a asp-controller="Home" asp-action="Index"><img src="~/assets-shop/img/logo/logo.png" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-md-6">
+                            <div class="middel_right">
+                                <div class="search_container">
+                                    <form asp-controller="Home" asp-action="Index" method="get">
+                                        <div class="search_box">
+                                            <input name="SearchString" placeholder="Nhập sản phẩm..." type="text">
+                                            <button type="submit">Tìm Kiếm</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="middel_right_info">
+                                    <div class="header_wishlist">
+                                        <div class="mini_cart_wrapper">
+                                            @if (@username != "Khách")
+                                            {
+                                                <div class="mini_cart_wrapper m-1">
+                                                    <a href="javascript:void(0)"><img src="~/assets-shop/img/user.png" alt=""></a>
+                                                    <!--mini cart-->
+                                                    <div class="mini_cart" style="min-width:250px">
+                                                        <span class="d-block" style="font-weight:600;border-bottom:1px solid #000;text-align:center;margin-bottom:.5rem">THÔNG TIN TÀI KHOẢN</span>
+                                                        <span class="justify-content-center uppercase mb-3" style="font-size:12px">Tên: @username</span>
+                                                        <span class="justify-content-center uppercase d-block" style="font-size:12px">Email: ishop@gmail.com</span>
+                                                        <div class="cart_button mt-3 ">
+                                                            <a asp-controller="Home" asp-action="Logout"><i class='bx bx-exit bx-rotate-180' style='color:#fff'></i> Logout</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            else
+                                            {
+                                                <div class="mini_cart_wrapper m-1">
+                                                    <a asp-controller="Home" asp-action="Login">Đăng nhập <img src="~/assets-shop/img/user.png" alt=""></a>
+                                                    <!--mini cart-->
+                                                    @*<div class="mini_cart">
+                                                            <h5>Tên : @username</h5>
+                                                            <div class="cart_button">
+                                                                <a asp-controller="Home" asp-action="Logout">Đăng Xuất</a>
+                                                            </div>
+                                                        </div>*@
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="mini_cart_wrapper">
+                                        <a asp-controller="Carts" asp-action="Index">Giỏ Hàng <img src="~/assets-shop/img/shopping-bag.png" alt=""></a>
+                                    </div>
+                                    <!--mini cart end-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </body>
-</html>
+        <!--header middel end-->
+        <!--header bottom satrt-->
+        <div class="main_menu_area">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="main_menu menu_position">
+                            <nav>
+                                <ul>
+                                    <li><a href="index-2.html">home</a></li>
+                                    <li><a href="product-details.html">Sản Phẩm</a></li>
+
+                                    <li>
+                                        <a href="blog.html">blog</a>
+                                    </li>
+                                    <li><a href="contact.html"> Liên Hệ</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--header bottom end-->
+    </header>
+}
+
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a href="index-2.html">home</a></li>
+                        <li>Giỏ Hàng</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--breadcrumbs area end-->
+<!--shopping cart area start -->
+<div class="shopping_cart_area mt-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="table_desc">
+                    @if (Model.Count() > 0)
+                    {
+                        int stt = 1;
+                    <div class="cart_page table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th class="product_thumb">Hình Ảnh</th>
+                                    <th class="product_name">Tên SP</th>
+                                    <th class="product-price">Giá</th>
+                                    <th class="product_quantity">Số Lượng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@(stt++)</td>
+                                        <td class="product_thumb"><a href="#"><img src="~/img/@item.Product.Image" width="60" /></a></td>
+                                        <td class="product_name">@item.Product.Name</td>
+                                        <td class="product-price">@item.Product.Price.ToString("#,##0") VNĐ</td>
+                                        <td class="product_quantity">
+                                            @if (item.Quantity <= 1)
+                                            {
+                                                <a class="text-success" id="deleteItem" data-toggle="modal" data-target="#deleteModal"
+                                                   data-path="/Carts/Delete/@item.Id"><i class='bx bx-minus'></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="text-success" asp-controller="Carts" asp-action="Remove"
+                                                   asp-route-id="@item.Product.Id">
+                                                    <i class='bx bx-minus'></i>
+                                                </a>
+                                            }
+                                            <input class="text-center p-2" value="@item.Quantity">
+                                            <a class="text-success" asp-controller="Carts" asp-action="UpdateCart"
+                                               asp-route-id="@item.Product.Id">
+                                                <i class='bx bx-plus'></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <!-- Logout Modal-->
+                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Bạn có chắc chắn?</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">Bạn muốn xóa sản phẩm này? <br /><span class="text-danger"></span></div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy Bỏ</button>
+                                        @using (Html.BeginForm("Delete", "Carts", FormMethod.Post, new { id = "myform", @class = "" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="submit" value="Xóa" id="submitButton" class="btn btn-danger" />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn btn-primary m-2" style="float:right">
+                            <a asp-controller="Home" asp-action="Index">Tiếp Tục Mua Hàng</a>
+                        </div>
+                    </div>
+                    }
+
+                    else
+                    {
+                        <div class="uppercase m-5">
+                            <h4>Giỏ hàng trống (<i class='bx bx-shopping-bag'></i>)</h4>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--coupon code area start-->
+    <div class="coupon_area">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="coupon_code left">
+                    <h3>Khuyến mãi</h3>
+                    <div class="coupon_inner">
+                        <p>Nhập mã khuyến mãi của bạn tại đây.</p>
+                        <input placeholder="Coupon code" type="text">
+                        <button type="submit">Áp dụng</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="coupon_code right">
+                    <h3>Tạm tính</h3>
+
+                    <div class="coupon_inner">
+                        <div class="cart_subtotal">
+                            <p style="font-size:20px;font-weight:bold">Tạm Tính (VNĐ):</p>
+                            <p class="cart_amount" style="font-size:20px;font-weight:bold">@ViewBag.Total.ToString("#,##0") VNĐ</p>
+                        </div>
+                        <div class="checkout_btn">
+                            <a asp-controller="Carts" asp-action="Pay">Thanh Toán</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--coupon code area end-->
+</div>
+<!--shopping cart area end -->
+
+
+@section footer{
+    <footer class="footer_widgets">
+        <div class="footer_top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widgets_container contact_us">
+                            <div class="footer_logo">
+                                <a href="#"><img src="assets/img/product/wanabuy-rbg.png" alt=""></a>
+                            </div>
+                            <div class="footer_contact">
+                                <p>iShop</p>
+                                <p>Cửa Hàng Điện Thoại Di Động Online</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-6">
+                        <div class="widgets_container widget_menu">
+                            <h3>THÔNG TIN</h3>
+                            <div class="footer_menu">
+                                <ul>
+                                    <li><a href="about.html">About Us</a></li>
+                                    <li><a href="blog.html">Delivery Information</a></li>
+                                    <li><a href="contact.html">Privacy Policy</a></li>
+                                    <li><a href="services.html">Terms & Conditions</a></li>
+                                    <li><a href="#">Returns</a></li>
+                                    <li><a href="#">Gift Certificates</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-6">
+                        <div class="widgets_container widget_menu">
+                            <h3>TÀI KHOẢN</h3>
+                            <div class="footer_menu">
+                                <ul>
+                                    <li><a href="#">My Account</a></li>
+                                    <li><a href="#">Order History</a></li>
+                                    <li><a href="wishlist.html">Wish List</a></li>
+                                    <li><a href="#">Newsletter</a></li>
+                                    <li><a href="#">Affiliate</a></li>
+                                    <li><a href="faq.html">International Orders</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widgets_container newsletter">
+                            <h3>THEO DÕI CHÚNG TÔI</h3>
+                            <div class="footer_social_link">
+                                <ul>
+                                    <li><a class="facebook" href="#" title="Facebook"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a class="twitter" href="#" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a class="instagram" href="#" title="instagram"><i class="fa fa-instagram"></i></a></li>
+                                    <li><a class="linkedin" href="#" title="linkedin"><i class="fa fa-linkedin"></i></a></li>
+                                    <li><a class="rss" href="#" title="rss"><i class="fa fa-rss"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="subscribe_form">
+                                <h3>Join Our Newsletter Now</h3>
+                                <form id="mc-form" class="mc-form footer-newsletter">
+                                    <input id="mc-email" type="email" autocomplete="off" placeholder="Your email address..." />
+                                    <button id="mc-submit">Subscribe!</button>
+                                </form>
+                                <!-- mailchimp-alerts Start -->
+                                <div class="mailchimp-alerts text-centre">
+                                    <div class="mailchimp-submitting"></div><!-- mailchimp-submitting end -->
+                                    <div class="mailchimp-success"></div><!-- mailchimp-success end -->
+                                    <div class="mailchimp-error"></div><!-- mailchimp-error end -->
+                                </div><!-- mailchimp-alerts end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer_bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="copyright_area">
+                            <p> <a href="templateshub.net">Templates Hub</a></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="footer_payment text-right">
+                            <a href="#"><img src="assets/img/icon/payment.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+}
+@section script{
+    <!-- Plugins JS -->
+    <script src="~/assets-shop/js/plugins.js"></script>
+    <!-- Main JS -->
+    <script src="~/assets-shop/js/main.js"></script>
+
+    <script>
+        var path_to_delete;
+        var root = location.protocol + "//" + location.host;
+
+        $("#deleteItem").click(function (e) {
+            path_to_delete = $(this).data('path');
+            $('#myform').attr('action', root + path_to_delete);
+        });
+    </script>
+}
+
+
+

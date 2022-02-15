@@ -8,25 +8,28 @@ using Microsoft.EntityFrameworkCore;
 using DoAn02.Data;
 using DoAn02.Models;
 using Microsoft.AspNetCore.Http;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace DoAn02.Controllers
 {
     public class HomeController : Controller
     {
         private readonly DoAnContext _context;
-
-        public HomeController(DoAnContext context)
+        private readonly INotyfService _notyf;
+        public HomeController(DoAnContext context, INotyfService notyf)
         {
             _context = context;
+            _notyf = notyf;
         }
 
         // GET: Home
-        public async Task<IActionResult> Index(string SearchString = "")
+        public IActionResult Index(string SearchString = "")
         {
-            if(HttpContext.Session.Keys.Contains("AccountUsername"))
+            if (HttpContext.Session.Keys.Contains("AccountUsername"))
             {
                 ViewBag.AccountUsername = HttpContext.Session.GetString("AccountUsername");
             }
+
             var doAnContext = _context.Products.Include(p => p.ProductType);
 
             List<Product> products;
@@ -37,8 +40,9 @@ namespace DoAn02.Controllers
                 .ToList();
                 return View(products);
             }
-            return View(await doAnContext.ToListAsync());
-        }   
+            var model = new Tuple<IEnumerable<Product>, IEnumerable<Cart>>(_context.Products.Include(p => p.ProductType), _context.Carts.Include(c => c.Account).Include(c => c.Product));
+            return View(model);
+        }
 
         public IActionResult Login()
         {
@@ -52,6 +56,7 @@ namespace DoAn02.Controllers
             {
                 HttpContext.Session.SetInt32("AccountID", acc.Id);
                 HttpContext.Session.SetString("AccountUsername", acc.Username);
+                _notyf.Success("Đăng nhập thành công",3);
                 return RedirectToAction("Index", "Home");
             }
             return View();
@@ -67,6 +72,7 @@ namespace DoAn02.Controllers
            // HttpContext.Session.Remove("AccountID");
             //HUY TOAN BO SESSION
             HttpContext.Session.Clear();
+            _notyf.Custom("Bạn đã đăng xuất", 3, "whitesmoke", "bx bx-log-out");
             return RedirectToAction("Index", "Home");
         }
 

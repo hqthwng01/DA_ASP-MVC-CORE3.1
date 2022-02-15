@@ -8,21 +8,28 @@ using Microsoft.EntityFrameworkCore;
 using DoAn02.Data;
 using DoAn02.Models;
 using Microsoft.AspNetCore.Http;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using Newtonsoft.Json;
 
 namespace DoAn02.Controllers
 {
     public class CartsController : Controller
     {
         private readonly DoAnContext _context;
-
-        public CartsController(DoAnContext context)
+        private readonly INotyfService _notyf; 
+        public CartsController(DoAnContext context, INotyfService notyf)
         {
             _context = context;
+            _notyf = notyf;
         }
 
         // GET: Carts
         public async Task<IActionResult> Index(string username)
         {
+            if (HttpContext.Session.Keys.Contains("AccountUsername"))
+            {
+                ViewBag.AccountUsername = HttpContext.Session.GetString("AccountUsername");
+            }
             var doAnContext = _context.Carts.Include(c => c.Account).Include(c => c.Product);
             ViewBag.Total = _context.Carts.Sum(c => c.Quantity * c.Product.Price);
             return View(await doAnContext.ToListAsync());
@@ -169,7 +176,7 @@ namespace DoAn02.Controllers
         {
             string username = HttpContext.Session.GetString("AccountUsername");
             int accountId = _context.Accounts.FirstOrDefault(a => a.Username == username).Id;
-            Cart cart = _context.Carts.FirstOrDefault(c => c.AccountId == accountId && c.ProductId == productId);           
+            Cart cart = _context.Carts.FirstOrDefault(c => c.AccountId == accountId && c.ProductId == productId);
             if (cart == null)
             {
                 cart = new Cart();
@@ -181,6 +188,94 @@ namespace DoAn02.Controllers
             else
             {
                 cart.Quantity += quantity;
+            }
+            _context.SaveChanges();
+            _notyf.Custom("Sản phẩm đã được thêm ", 5, "#387efd", "bx bxs-cart-download");
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult UpdateCart(int id)
+        {
+            return UpdateCart(id, 1);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateCart(int productId, int quantity)
+        {
+            string username = HttpContext.Session.GetString("AccountUsername");
+            int accountId = _context.Accounts.FirstOrDefault(a => a.Username == username).Id;
+            Cart cart = _context.Carts.FirstOrDefault(c => c.AccountId == accountId && c.ProductId == productId);
+            if (cart == null)
+            {
+                cart = new Cart();
+                cart.AccountId = accountId;
+                cart.ProductId = productId;
+                cart.Quantity = quantity;
+                _context.Carts.Add(cart);
+            }
+            else
+            {
+                cart.Quantity += quantity;
+            }
+            _context.SaveChanges();
+            _notyf.Custom("Sản phẩm đã được thêm ", 5, "#387efd", "bx bxs-cart-download");
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Buynow(int id)
+        {
+            return Buynow(id, 1);
+        }
+
+        [HttpPost]
+        public IActionResult Buynow(int productId, int quantity)
+        {
+            string username = HttpContext.Session.GetString("AccountUsername");
+            int accountId = _context.Accounts.FirstOrDefault(a => a.Username == username).Id;
+            Cart cart = _context.Carts.FirstOrDefault(c => c.AccountId == accountId && c.ProductId == productId);
+            if (cart == null)
+            {
+                cart = new Cart();
+                cart.AccountId = accountId;
+                cart.ProductId = productId;
+                cart.Quantity = quantity;
+                _context.Carts.Add(cart);
+            }
+            else
+            {
+                cart.Quantity += quantity;
+            }
+            _context.SaveChanges();
+            _notyf.Custom("Sản phẩm đã được thêm ", 5, "#387efd", "bx bxs-cart-download");
+            return RedirectToAction("Index", "Carts");
+        }
+
+        public IActionResult Remove(int id)
+        {
+            return Remove(id, 1);
+        }
+        [HttpPost]
+        public IActionResult Remove(int productId, int quantity)
+        {
+            string username = HttpContext.Session.GetString("AccountUsername");
+            int accountId = _context.Accounts.FirstOrDefault(a => a.Username == username).Id;
+            Cart cart = _context.Carts.FirstOrDefault(c => c.AccountId == accountId && c.ProductId == productId);
+            if (cart == null )
+            {
+                cart.AccountId = accountId;
+                cart.ProductId = productId;
+                cart.Quantity = quantity;
+                _context.Carts.Remove(cart);
+            }
+            else
+            {
+                cart.Quantity -= quantity;
+            }
+            if (quantity <= 0)
+            {
+                _context.Carts.Remove(cart);
+                _context.SaveChanges();
+                return RedirectToAction("Index", "Carts");
             }
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -199,20 +294,26 @@ namespace DoAn02.Controllers
             }
             return true;
         }
+        public async Task<IActionResult> Pay()
+        {         
 
-        public IActionResult Pay()
-        {
+            if (HttpContext.Session.Keys.Contains("AccountUsername"))
+            {
+                ViewBag.AccountUsername = HttpContext.Session.GetString("AccountUsername");
+            }
             string username = HttpContext.Session.GetString("AccountUsername");
             ViewBag.Account = _context.Accounts.Where(a => a.Username == username).FirstOrDefault();
             ViewBag.CartTotal = _context.Carts.Include(c => c.Product).Include(c => c.Account)
                 .Where(c => c.Account.Username == username)
                 .Sum(c => c.Quantity * c.Product.Price);
-            return View();
+            var doAnContext = _context.Carts.Include(c => c.Account).Include(c => c.Product);
+            return View(Tuple.Create<Invoice, IEnumerable<Cart>>(new Invoice(), _context.Carts.Include(c => c.Account).Include(c => c.Product).ToList()));
         }
 
         [HttpPost]
-        public IActionResult Pay([Bind("ShippingAddress,ShippingPhone")] Invoice invoice)
+        public IActionResult Pay([Bind(Prefix = "Item1")] Invoice invoice, Product product)
         {
+
             string username = HttpContext.Session.GetString("AccountUsername");
 
             if (!CheckStock(username))
@@ -250,7 +351,7 @@ namespace DoAn02.Controllers
                 invoiceDetail.Quantity = c.Quantity;
                 invoiceDetail.UnitPrice = c.Product.Price;
                 _context.Add(invoiceDetail);
-            }
+            }           
 
             _context.SaveChanges();
 
@@ -261,7 +362,16 @@ namespace DoAn02.Controllers
                 _context.Carts.Remove(c);
             }
             _context.SaveChanges();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Ordersuccess", "Carts");
+        }
+
+        public IActionResult Ordersuccess()
+        {
+            if (HttpContext.Session.Keys.Contains("AccountUsername"))
+            {
+                ViewBag.AccountUsername = HttpContext.Session.GetString("AccountUsername");
+            }
+            return View();
         }
 
         private bool CheckStock(string username)

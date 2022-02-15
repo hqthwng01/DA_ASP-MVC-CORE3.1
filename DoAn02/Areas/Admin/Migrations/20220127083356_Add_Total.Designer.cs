@@ -4,14 +4,16 @@ using DoAn02.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DoAn02.Migrations
 {
     [DbContext(typeof(DoAnContext))]
-    partial class DoAnContextModelSnapshot : ModelSnapshot
+    [Migration("20220127083356_Add_Total")]
+    partial class Add_Total
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,9 +109,6 @@ namespace DoAn02.Migrations
                     b.Property<DateTime>("IssuedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ProductItemsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ShippingAddress")
                         .HasColumnType("nvarchar(max)");
 
@@ -119,17 +118,12 @@ namespace DoAn02.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Total")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("ProductItemsId");
 
                     b.ToTable("Invoices");
                 });
@@ -240,10 +234,6 @@ namespace DoAn02.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DoAn02.Models.Product", "ProductItems")
-                        .WithMany()
-                        .HasForeignKey("ProductItemsId");
                 });
 
             modelBuilder.Entity("DoAn02.Models.InvoiceDetail", b =>
