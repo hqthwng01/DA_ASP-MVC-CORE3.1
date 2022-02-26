@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DoAn02.Data;
 using DoAn02.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DoAn02.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+
     public class ProductTypesController : Controller
     {
         private readonly DoAnContext _context;

@@ -10,10 +10,13 @@ using DoAn02.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DoAn02.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+
     public class AccountsController : Controller
     {
         private readonly DoAnContext _context;
@@ -45,22 +48,24 @@ namespace DoAn02.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(string Username, string Password)
+        public IActionResult Login(string Username, string Password)
         {
             Account acc = _context.Accounts.Where(a => a.Username == Username && a.Password == Password).FirstOrDefault();
             if (acc != null)
             {
-
+                if (acc.Status == false)
+                {
+                    ViewBag.Error = "Tài khoản đã bị khóa";
+                }
                 HttpContext.Session.SetInt32("AccountID", acc.Id);
                 HttpContext.Session.SetString("AccountUsername", acc.Username);
                 return RedirectToAction("Index", "Admin");
             }
             else
             {
-                ViewBag.BaoLoi = "Dang nhap that bai";
+                ViewBag.Msg = "Sai Username hoặc mật khẩu";
                 return View();
             }
-
         }
         public IActionResult Logout()
         {

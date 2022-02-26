@@ -9,14 +9,13 @@ using DoAn02.Data;
 using DoAn02.Models;
 using Microsoft.AspNetCore.Http;
 using AspNetCoreHero.ToastNotification.Abstractions;
-using Newtonsoft.Json;
 
 namespace DoAn02.Controllers
 {
     public class CartsController : Controller
     {
         private readonly DoAnContext _context;
-        private readonly INotyfService _notyf; 
+        private readonly INotyfService _notyf;
         public CartsController(DoAnContext context, INotyfService notyf)
         {
             _context = context;
@@ -29,6 +28,7 @@ namespace DoAn02.Controllers
             if (HttpContext.Session.Keys.Contains("AccountUsername"))
             {
                 ViewBag.AccountUsername = HttpContext.Session.GetString("AccountUsername");
+                ViewBag.Email = HttpContext.Session.GetString("Email");
             }
             var doAnContext = _context.Carts.Include(c => c.Account).Include(c => c.Product);
             ViewBag.Total = _context.Carts.Sum(c => c.Quantity * c.Product.Price);
@@ -260,7 +260,8 @@ namespace DoAn02.Controllers
             string username = HttpContext.Session.GetString("AccountUsername");
             int accountId = _context.Accounts.FirstOrDefault(a => a.Username == username).Id;
             Cart cart = _context.Carts.FirstOrDefault(c => c.AccountId == accountId && c.ProductId == productId);
-            if (cart == null )
+
+            if (cart == null)
             {
                 cart.AccountId = accountId;
                 cart.ProductId = productId;
@@ -271,31 +272,25 @@ namespace DoAn02.Controllers
             {
                 cart.Quantity -= quantity;
             }
-            if (quantity <= 0)
-            {
-                _context.Carts.Remove(cart);
                 _context.SaveChanges();
                 return RedirectToAction("Index", "Carts");
-            }
-            _context.SaveChanges();
-            return RedirectToAction("Index");
         }
 
-        private bool Ktra(string username)
-        {
-            List<Cart> carts = _context.Carts.Include(c => c.Product).Include(c => c.Account)
-                .Where(c => c.Account.Username == username).ToList();
-            foreach (Cart c in carts)
-            {
-                if (c.Product.Stock < c.Quantity)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        //private bool Ktra(string username)
+        //{
+        //    List<Cart> carts = _context.Carts.Include(c => c.Product).Include(c => c.Account)
+        //        .Where(c => c.Account.Username == username).ToList();
+        //    foreach (Cart c in carts)
+        //    {
+        //        if (c.Product.Stock < c.Quantity)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
         public async Task<IActionResult> Pay()
-        {         
+        {
 
             if (HttpContext.Session.Keys.Contains("AccountUsername"))
             {
@@ -351,7 +346,7 @@ namespace DoAn02.Controllers
                 invoiceDetail.Quantity = c.Quantity;
                 invoiceDetail.UnitPrice = c.Product.Price;
                 _context.Add(invoiceDetail);
-            }           
+            }
 
             _context.SaveChanges();
 

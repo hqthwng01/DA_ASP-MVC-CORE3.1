@@ -18,6 +18,35 @@
                     </p>
                 </form>
 
+                <div class="col-md-3">
+                    <form asp-controller="Products" asp-action="Index" method="get">
+                        <fieldset class="form-group d-inline-flex pr-2">
+                            <select class="form-select mr-1" id="basicSelect" name="SearchString">
+                                <option>Hãng</option>
+                                <option>Oppo</option>
+                                <option>Xiaomi</option>
+                                <option>Samsung</option>
+                                <option>Iphone</option>
+                            </select>
+                            <input type="submit" value="Lọc" class="btn btn-danger ml-1" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <div class="col-md-3">
+                    <form asp-controller="Products" asp-action="Index" method="get">
+                        <fieldset class="form-group d-inline-flex pr-2">
+                            <select class="form-select mr-1" id="basicSelect" name="Price10">
+                                <option>Giá</option>
+                                <option>Trên 10 Triệu</option>
+                                <option>Trên 20 Triệu</option>
+                                <option>Trên 30 Triệu</option>
+                            </select>
+                            <input type="submit" value="Lọc" class="btn btn-danger ml-1" />
+                        </fieldset>
+                    </form>
+                </div>
+
                 <div class="card-content">
                     <div class="card-body">
                         <p>

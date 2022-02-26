@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DoAn02.Data;
 using DoAn02.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DoAn02.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+
     public class InvoicesController : Controller
     {
         private readonly DoAnContext _context;
@@ -21,10 +24,18 @@ namespace DoAn02.Controllers
         }
 
         // GET: Invoices
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchString = "")
         {
-            var doAnContext = _context.Invoices.Include(i => i.Account);
-            return View(await doAnContext.ToListAsync());
+            var kq = _context.Invoices.Include(i => i.Account);
+            List<Invoice> invoices;
+            if (SearchString != "" && SearchString != null)
+            {
+                invoices = _context.Invoices
+                .Where(p => p.StatusId == 1)
+                .ToList();
+                return View(invoices);
+            }
+            return View(await kq.ToListAsync());
         }
 
         // GET: Invoices/Details/5
@@ -36,7 +47,7 @@ namespace DoAn02.Controllers
             }
 
             var invoice = await _context.Invoices
-                .Include(i => i.Account)
+                .Include(i => i.UserId)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (invoice == null)
             {
@@ -47,7 +58,7 @@ namespace DoAn02.Controllers
 
         public IActionResult ViewDetails()
         {
-            var model = new Tuple<IEnumerable<Invoice>, IEnumerable<InvoiceDetail>>(_context.Invoices.Include(i => i.Account), _context.InvoiceDetails.Include(i => i.Invoice).Include(i => i.Product));
+            var model = new Tuple<IEnumerable<Invoice>, IEnumerable<InvoiceDetail>>(_context.Invoices.Include(i => i.UserId), _context.InvoiceDetails.Include(i => i.Invoice).Include(i => i.Product));
             return View(model);
         }
 
@@ -71,7 +82,7 @@ namespace DoAn02.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Password", invoice.AccountId);
+            ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Password", invoice.UserId);
             return View(invoice);
         }
 
@@ -88,14 +99,14 @@ namespace DoAn02.Controllers
             {
                 return NotFound();
             }
-            ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Password", invoice.AccountId);
+            ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Password", invoice.UserId);
 
             ViewBag.Trangthai = new List<SelectListItem>
             {
             new SelectListItem { Text = "Chờ duyệt", Value = "0" },
             new SelectListItem { Text = "Đang giao hàng", Value = "1" },
             new SelectListItem { Text = "Hủy đơn", Value = "2" },
-            new SelectListItem { Text = "Đã giao", Value = "3" }
+            new SelectListItem { Text = "Success", Value = "3" }
             };
             return View(invoice);
         }
@@ -132,7 +143,7 @@ namespace DoAn02.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Password", invoice.AccountId);
+            ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Password", invoice.UserId);
             return View(invoice);
         }
 
@@ -145,7 +156,7 @@ namespace DoAn02.Controllers
             }
 
             var invoice = await _context.Invoices
-                .Include(i => i.Account)
+                .Include(i => i.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (invoice == null)
             {

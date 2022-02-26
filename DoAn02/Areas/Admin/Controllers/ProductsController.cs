@@ -10,10 +10,12 @@ using DoAn02.Models;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DoAn02.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
         private readonly DoAnContext _context;
@@ -26,15 +28,30 @@ namespace DoAn02.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string SearchString = "")
+        public async Task<IActionResult> Index(string SearchString = "",string Price10 ="")
         {
             var kq = _context.Products.Include(p => p.ProductType);
             List<Product> products;
             if (SearchString != "" && SearchString != null)
             {
                 products = _context.Products
-                .Where(p => p.SKU.Contains(SearchString))
+                .Where(p => p.SKU.Contains(SearchString) || p.ProductType.Name.Contains(SearchString) || p.Price.ToString().Contains(SearchString) || p.Name.Contains(SearchString))
                 .ToList();
+                return View(products);
+            }
+            if (Price10 == "Trên 10 Triệu" && Price10 != null)
+            {
+                products = _context.Products.Where(inv => inv.Price >= 10000000).ToList<Product>();
+                return View(products);
+            }
+            if (Price10 == "Trên 20 Triệu" && Price10 != null)
+            {
+                products = _context.Products.Where(inv => inv.Price >= 20000000).ToList<Product>();
+                return View(products);
+            }
+            if (Price10 == "Trên 30 Triệu" && Price10 != null)
+            {
+                products = _context.Products.Where(inv => inv.Price >= 30000000).ToList<Product>();
                 return View(products);
             }
             return View(await kq.ToListAsync());

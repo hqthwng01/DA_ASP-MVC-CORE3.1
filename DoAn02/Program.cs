@@ -21,6 +21,7 @@ namespace DoAn02
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+         });
+
     }
 }

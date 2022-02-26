@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_LayoutShop.cshtml";
     Account acc = ViewBag.Account;
     string username = ViewBag.AccountUsername;
+    string email = ViewBag.Email;
     if (ViewBag.AccountUsername != null)
     {
         username = ViewBag.AccountUsername;
@@ -88,14 +89,13 @@
                                                     <div class="mini_cart" style="min-width:250px">
                                                         <span class="d-block" style="font-weight:600;border-bottom:1px solid #000;text-align:center;margin-bottom:.5rem">THÔNG TIN TÀI KHOẢN</span>
                                                         <span class="justify-content-center uppercase mb-3" style="font-size:12px">Tên: @username</span>
-                                                        <span class="justify-content-center uppercase d-block" style="font-size:12px">Email: ishop@gmail.com</span>
+                                                        <span class="justify-content-center uppercase d-block" style="font-size:12px">Email: @email</span>
                                                         <div class="cart_button mt-3 ">
-                                                            <a asp-controller="Home" asp-action="Logout"><i class='bx bx-exit bx-rotate-180' style='color:#fff'></i> Logout</a>
+                                                            <a asp-controller="Account" asp-action="Logout"><i class='bx bx-exit bx-rotate-180' style='color:#fff'></i> Logout</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             }
-
                                             else
                                             {
                                                 <div class="mini_cart_wrapper m-1">

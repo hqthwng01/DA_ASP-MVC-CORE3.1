@@ -1,9 +1,11 @@
 using AspNetCoreHero.ToastNotification;
 using com.sun.tools.doclets.@internal.toolkit;
+using DoAn02.Areas.Data;
 using DoAn02.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,10 +33,19 @@ namespace DoAn02
             services.AddDistributedMemoryCache();
             services.AddSession(session =>
             {
-                session.IdleTimeout = new TimeSpan(7, 0, 0, 0);
+                session.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
+            services.Configure<PasswordHasherOptions>(option =>
+            {
+                option.IterationCount = 12000;
             });
             services.AddControllersWithViews();
-            services.AddDbContext<DoAnContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DBDOAN")));
+            services.AddRazorPages();
+            services.AddDbContext<DoAnContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DoAnContextcsConnection")));
+            services.AddDefaultIdentity<ApplicationUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<DoAnContext>();
+            //services.AddIdentity<IdentityUser, IdentityRole>();
             services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
         }
 
@@ -56,19 +67,22 @@ namespace DoAn02
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "Admin",
-                    pattern: "{area:exists}/{controller=Products}/{action=Index}/{id?}");
+            endpoints.MapControllerRoute(
+                name: "Admin",
+                pattern: "{area:exists}/{controller=Products}/{action=Index}/{id?}");
 
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapRazorPages();
             });
         }
     }

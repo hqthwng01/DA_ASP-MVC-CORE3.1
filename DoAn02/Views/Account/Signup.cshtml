@@ -1,0 +1,79 @@
+﻿@model DoAn02.Models.Account
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "_LayoutShop";
+    string username = ViewBag.AccountUsername;
+    if (ViewBag.AccountUsername != null)
+    {
+        username = ViewBag.AccountUsername;
+    }
+    else
+    {
+        username = "Khách";
+    }
+}
+
+@section head{
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>iShop - Cửa Hàng Điện Thoại Di Động Online</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets-shop/img/favicon.ico">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="~/assets-shop/css/plugins.css">
+
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="~/assets-shop/css/style.css">
+    <link rel="stylesheet" href="~/assets-shop/css/custom.css">
+}
+
+<section class="account">
+    <div class="row justify-content-center">
+        <div class="">
+            <div class="account-contents" style="background: url('~/assets-shop/img/about/about1.jpg'); background-size: cover;">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                        <div class="account-thumb">
+                            <h2>Đăng kí tài khoản</h2>
+                            <p>Đăng kí tài khoản nhanh chóng với Identity</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                        <div class="account-content">
+                            <form asp-controller="Account" asp-action="Signup" method="post">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="single-acc-field">
+                                    <label for="name">Họ Tên</label>
+                                    <input asp-for="FullName" type="text" id="name" placeholder="Nhập họ và tên">
+                                </div>
+                                <div class="single-acc-field">
+                                    <label for="name">Username</label>
+                                    <input asp-for="Username" type="text" id="name" placeholder="Conmeoden..">
+                                </div>
+                                <div class="single-acc-field">
+                                    <label for="name">Email</label>
+                                    <input asp-for="Email" type="email" id="name" placeholder="Nhập email...">
+                                </div>
+                                <div class="single-acc-field">
+                                    <label for="name">Password</label>
+                                    <input asp-for="Password" type="password" id="password" placeholder="Nhập pass...">
+                                </div>
+                                <div class="single-acc-field">
+                                    <button type="submit">Đăng kí</button>
+                                </div>
+                                <a asp-area="Identity" asp-page="/Account/Login">Đã có tài khoản? Đăng nhập tại đây</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

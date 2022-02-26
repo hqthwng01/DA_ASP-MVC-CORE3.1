@@ -1,10 +1,12 @@
-﻿@model Tuple<IEnumerable<DoAn02.Models.Product>, IEnumerable<DoAn02.Models.Cart>>
+﻿@model IEnumerable<DoAn02.Models.Product>
 
 @{
     ViewData["Title"] = "Home Page";
     Layout = "_LayoutShop";
     Cart c = ViewBag.Cart;
+    Account a = ViewBag.Profile;
     string username = ViewBag.AccountUsername;
+    string email = ViewBag.Email;
     if (ViewBag.AccountUsername != null)
     {
         username = ViewBag.AccountUsername;
@@ -50,8 +52,15 @@
                         <div class="col-lg-6 col-md-6">
                             <div class="top_right text-right">
                                 <ul>
-                                    <li><a asp-controller="Home" asp-action="Login">Đăng Kí</a></li>
-                                    <li><a href="checkout.html">Đơn Hàng</a></li>
+                                    <li><a asp-controller="Account" asp-action="Signup">Đăng Kí</a></li>
+                                    @if (@username != "Khách")
+                                    {
+                                        <li><a asp-controller="Carts" asp-action="Index">Đơn Hàng</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a asp-controller="Account" asp-action="Login">Đơn Hàng</a></li>
+                                    }
                                 </ul>
                             </div>
                         </div>
@@ -89,18 +98,19 @@
                                                     <div class="mini_cart" style="min-width:250px">
                                                         <span class="d-block" style="font-weight:600;border-bottom:1px solid #000;text-align:center;margin-bottom:.5rem">THÔNG TIN TÀI KHOẢN</span>
                                                         <span class="justify-content-center uppercase mb-3" style="font-size:12px">Tên: @username</span>
-                                                        <span class="justify-content-center uppercase d-block" style="font-size:12px">Email: ishop@gmail.com</span>
+                                                        <span class="justify-content-center uppercase d-block" style="font-size:12px">Email: @email</span>
                                                         <div class="cart_button mt-3 ">
-                                                            <a asp-controller="Home" asp-action="Logout"><i class='bx bx-exit bx-rotate-180' style='color:#fff'></i> Logout</a>
+                                                            <partial name="_ProfilePartial" />
+                                                            <a asp-controller="Account" asp-action="Logout"><i class='bx bx-exit bx-rotate-180' style='color:#fff'></i> Logout</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             }
 
                                             else
-                                            {
+                                               {
                                                 <div class="mini_cart_wrapper m-1">
-                                                    <a asp-controller="Home" asp-action="Login">Đăng nhập <img src="~/assets-shop/img/user.png" alt=""></a>
+                                                    <a asp-controller="Account" asp-action="Login">Đăng nhập <img src="~/assets-shop/img/user.png" alt=""></a>
                                                     <!--mini cart-->
                                                     @*<div class="mini_cart">
                                                             <h5>Tên : @username</h5>
@@ -112,36 +122,31 @@
                                             }
                                         </div>
                                     </div>
-                                    @if (Model.Item2.Count() > 0)
-                                    {
+                                    
                                 <div class="mini_cart_wrapper">
-                                    @if (username != "Khách")
-                                    {
+                                        @if (username != "Khách")
+                                        {
                                         <a asp-controller="Carts" asp-action="Index">
                                             Giỏ Hàng<img src="~/assets-shop/img/shopping-bag.png" alt="">
                                         </a>
-                                    }
-                                    else
-                                    {
-                                        <a asp-controller="Home" asp-action="Login">
+                                        }
+                                        else
+                                        {
+                                        <a asp-controller="Account" asp-action="Login">
                                             Giỏ Hàng<img src="~/assets-shop/img/shopping-bag.png" alt="">
                                         </a>
-                                    }
-                                    @foreach (var item in Model.Item2)
-                                    {
-                                        <span class="cart_quantity" style="margin-left:3.5rem">@Model.Item2.Count()</span>
-                                    }
+                                        }
+                                        @*<span class="cart_quantity" style="margin-left:3.5rem"></span>*@
+                                    
                                 </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="mini_cart_wrapper">
-                                            <a asp-controller="Carts" asp-action="Index">
+                                    
+                                        @*<div class="mini_cart_wrapper">
+                                            <a asp-controller="Carts" asp-action="Index" asp-route-id="">
                                                 Giỏ Hàng<img src="~/assets-shop/img/shopping-bag.png" alt="">
                                                 <span class="cart_quantity" style="margin-left:3.5rem">0</span>
                                             </a>
-                                        </div>
-                                    }
+                                        </div>*@
+                                    
                                     <!--mini cart end-->
                                 </div>
                             </div>
@@ -252,7 +257,16 @@
             </div>
         </div>
         <div class="row justify-content-center">
-            @foreach (var item in Model.Item1)
+            @if (Model.Count() == 0)
+            {
+               <p colspan="3" style="color:red">Không có kết quả tìm kiếm!</p>
+               <span class="ml-1">
+                   <a asp-controller="Home" asp-action="Index"> Trở lại</a>
+               </span>
+            }
+            else
+            {
+            @foreach (var item in Model)
             {
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
                     <div class="single-tranding">
@@ -272,7 +286,7 @@
                                     }
                                     else
                                     {
-                                        <a class="" asp-controller="Home" asp-action="Login">
+                                        <a class="" asp-controller="Account" asp-action="Login">
                                             <img src="~/img/cart.png" width="20">
                                         </a>
                                     }
@@ -286,7 +300,7 @@
                                     }
                                     else
                                     {
-                                        <a asp-controller="Home" asp-action="Login">
+                                        <a asp-controller="Account" asp-action="Login">
                                             <span class="btn btn-primary">MUA NGAY</span>
                                         </a>
                                     }
@@ -301,6 +315,7 @@
                         </a>
                     </div>
                 </div>
+            }
             }
         </div>
     </div>

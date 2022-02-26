@@ -48,7 +48,7 @@
                         <div class="col-lg-6 col-md-6">
                             <div class="top_right text-right">
                                 <ul>
-                                    <li><a asp-controller="Home" asp-action="Login">Đăng Kí</a></li>
+                                    <li><a asp-area="Identity" asp-page="/Account/Register">Đăng Kí</a></li>
                                     <li><a href="checkout.html">Đơn Hàng</a></li>
                                 </ul>
                             </div>
@@ -98,7 +98,7 @@
                                             else
                                             {
                                                 <div class="mini_cart_wrapper m-1">
-                                                    <a asp-controller="Home" asp-action="Login">Đăng nhập <img src="~/assets-shop/img/user.png" alt=""></a>
+                                                    <a asp-controller="Account" asp-action="Login">Đăng nhập <img src="~/assets-shop/img/user.png" alt=""></a>
                                                     <!--mini cart-->
                                                     @*<div class="mini_cart">
                                                             <h5>Tên : @username</h5>
@@ -178,7 +178,9 @@
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <div class="account-content">
-                                <form asp-controller="Home" asp-action="Login" method="post">
+                                <form asp-controller="Account" asp-action="Login" method="post">
+                                    <p>@ViewBag.Msg</p>
+                                    <p>@ViewBag.Error</p>
                                     <div class="single-acc-field">
                                         <label asp-for="Username"></label>
                                         <input asp-for="Username" class="from-control" />
@@ -193,10 +195,9 @@
                                     </div>
                                     <div class="single-acc-field">
                                         <button type="submit">Đăng nhập</button>
-                                        
                                     </div>
-                                    <a href="forget-password.html">Quên mật khẩu?</a>
-                                    <a href="register.html">Chưa có tài khoản?</a>
+                                    <a asp-area="Identity" asp-page="/Account/ForgotPassword">Quên mật khẩu?</a>
+                                    <a asp-controller="Account" asp-action="Signup">Chưa có tài khoản?</a>
                                 </form>
                             </div>
                         </div>

@@ -227,8 +227,14 @@
                         <div class="product_variant quantity">
                             <label>Số lượng</label>
                             <input min="1" max="100" value="1" type="number">
-                            <button asp-controller="Carts" asp-action="Add" class="button" type="submit">Thêm vào giỏ hàng</button>
-
+                            @if (username != "Khách")
+                            {
+                            <button asp-controller="Carts" asp-action="Add" asp-route-id="@Model.Id" class="button">Thêm vào giỏ hàng</button>
+                            }
+                            else
+                            {
+                            <button asp-controller="Account" asp-action="Login" class="button">Thêm vào giỏ hàng</button>
+                            }
                         </div>
                         <div class=" product_d_action">
                             <ul>

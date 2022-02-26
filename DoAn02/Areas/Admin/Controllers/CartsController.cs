@@ -9,10 +9,13 @@ using DoAn02.Data;
 using DoAn02.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DoAn02.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+
     public class CartsController : Controller
     {
         private readonly DoAnContext _context;
@@ -202,7 +205,7 @@ namespace DoAn02.Areas.Admin.Controllers
             string username = HttpContext.Session.GetString("AccountUsername");
             int accountId = _context.Accounts.FirstOrDefault(a => a.Username == username).Id;
             Cart cart = _context.Carts.FirstOrDefault(c => c.AccountId == accountId && c.ProductId == productId);
-            if(cart == null)
+            if (cart == null)
             {
                 cart = new Cart();
                 cart.AccountId = accountId;
@@ -229,11 +232,11 @@ namespace DoAn02.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Pay([Bind("ShippingAddress,ShippingPhone")]Invoice invoice)
+        public IActionResult Pay([Bind("ShippingAddress,ShippingPhone")] Invoice invoice)
         {
             string username = HttpContext.Session.GetString("AccountUsername");
 
-            if(!CheckStock(username))
+            if (!CheckStock(username))
             {
                 ViewBag.ErrorMessage = "sản phẩm hết hàng. Vui lòng kiểm tra.";
                 ViewBag.Account = _context.Accounts.Where(a => a.Username == username).FirstOrDefault();
@@ -271,7 +274,7 @@ namespace DoAn02.Areas.Admin.Controllers
             _context.SaveChanges();
 
             //trừ sl tồn kho và xóa giỏ hàng
-            foreach(Cart c in carts)
+            foreach (Cart c in carts)
             {
                 c.Product.Stock -= c.Quantity;
                 _context.Carts.Remove(c);
@@ -285,9 +288,9 @@ namespace DoAn02.Areas.Admin.Controllers
             List<Cart> carts = _context.Carts.Include(c => c.Product).Include(c => c.Account)
                 .Where(c => c.Account.Username == username).ToList();
 
-            foreach(Cart c in carts)
+            foreach (Cart c in carts)
             {
-                if(c.Product.Stock < c.Quantity)
+                if (c.Product.Stock < c.Quantity)
                 {
                     return false;
                 }
